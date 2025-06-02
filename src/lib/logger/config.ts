@@ -1,4 +1,4 @@
-import { LogLevel } from "@/server/logger/types";
+import { LogLevel } from '@/server/logger/types';
 
 export interface LoggerConfig {
   defaultContext?: string;

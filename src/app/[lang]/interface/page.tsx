@@ -1,9 +1,10 @@
 import { hrefs } from '@/config/hrefs';
+import { getDictionary } from '@/services/i18n';
 import { ColorModeSwitcher } from 'src/components/color-mode-switcher';
 import { ReactLogo } from 'src/components/react-logo';
 import { Button } from 'src/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from 'src/components/ui/card';
-import { getDictionary } from 'src/services/i18n';
+
 import { Locale } from 'src/types/i18n-types';
 
 export default async function InterfacePage({ params }: { params: Promise<{ lang: Locale }> }) {
@@ -33,13 +34,13 @@ export default async function InterfacePage({ params }: { params: Promise<{ lang
                 {intl.actions.viewDashboard}
               </Button>
             </div>
-            <div className="flex justify-center">
-              <form action={hrefs.auth.signOut} method="POST" className="w-full">
-                <Button type="submit" variant="destructive" className="mt-2 w-full">
-                  {common.signOut}
-                </Button>
-              </form>
-            </div>
+
+            <form className="flex justify-center" action={hrefs.auth.signOut} method="POST">
+              <Button type="submit" variant="destructive" className="mt-2 w-full ">
+                {common.signOut}
+              </Button>
+            </form>
+
             <div className="relative">
               <div className="flex absolute inset-0 items-center">
                 <span className="w-full border-t" />

@@ -14,11 +14,13 @@ export async function createSession({ accessToken, refreshToken }: Session): Pro
 export async function deleteSession() {
   try {
     const cookiesStore = await cookies();
+    const accessToken = await getTokenCookie(Cookie_Keys.token);
+    console.log('accessToken', accessToken);
     await fetch(routesBackend.auth.signout, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `bearer ${await getTokenCookie(Cookie_Keys.token)}`,
+        'Authorization': `bearer ${accessToken}`,
       },
     });
     // Limpar cookies

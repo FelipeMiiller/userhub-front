@@ -45,7 +45,7 @@ export class SlackNotificationProvider {
       iconEmoji: this.iconEmoji,
       environment: this.environment,
       timeout: 5000, // 5 segundos
-      logLevels: [LogLevel.ERROR, LogLevel.WARN],
+      logLevels: [LogLevel.ERROR, LogLevel.WARN, LogLevel.INFO],
       webhookUrl: this.webhookUrl,
     };
 
@@ -122,6 +122,9 @@ export class SlackNotificationProvider {
     metadata?: Record<string, any>;
     timestamp: Date;
   }): Promise<void> {
+    if (this.config.environment === 'test') {
+      return;
+    }
     const { level, message, context, metadata = {}, timestamp } = params;
     const { environment, logLevels } = this.config;
 

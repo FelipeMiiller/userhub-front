@@ -1,14 +1,76 @@
 <div align="center">
-  <svg width="120" height="120" viewBox="0 0 600 600" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <g>
-      <animateTransform attributeName="transform" attributeType="XML" type="rotate" from="0 300 300" to="360 300 300" dur="6s" repeatCount="indefinite"/>
-      <ellipse cx="300" cy="300" rx="250" ry="100" stroke="#61DAFB" stroke-width="30" fill="none"/>
-      <ellipse cx="300" cy="300" rx="250" ry="100" stroke="#61DAFB" stroke-width="30" fill="none" transform="rotate(60 300 300)"/>
-      <ellipse cx="300" cy="300" rx="250" ry="100" stroke="#61DAFB" stroke-width="30" fill="none" transform="rotate(120 300 300)"/>
-      <circle cx="300" cy="300" r="60" fill="#61DAFB"/>
-    </g>
-  </svg>
+  <img src="https://raw.githubusercontent.com/vercel/next.js/canary/examples/with-tailwindcss/public/next.svg" width="120" alt="Next.js Logo" />
 </div>
+
+# Frontend - UserHub
+
+Sistema de autenticação e gerenciamento de usuários
+
+---
+
+## Funcionalidades
+
+### 1. Tela de Login
+- Campos: email e senha
+- Após login:
+  - **Admin:** Redireciona para listagem de usuários
+  - **User:** Redireciona para tela de perfil
+
+### 2. Tela de Cadastro
+- Campos: nome, email, senha
+- Redireciona para tela de login após cadastro
+
+### 3. Tela de Listagem (Admins)
+- Mostra: nome, email, papel, status (ativo/inativo)
+- Filtros por papel (`admin`/`user`), ordenação por nome/data
+- Botões para editar ou excluir (opcional)
+
+### 4. Tela de Perfil (Usuário)
+- Mostra: nome, email, data de criação
+- Permite editar nome e senha
+
+---
+
+## Requisitos Técnicos
+- **Framework:** ReactJS + TypeScript
+- **Rotas:** React Router
+- **Estado Global:** Context API ou Redux
+- **HTTP Client:** Axios ou Fetch API
+- **Estilo:** TailwindCSS, Styled Components ou CSS Modules
+- **Login Social (Opcional):** react-google-login, msal-react
+
+## Responsividade
+- Compatível com dispositivos móveis e desktops
+
+---
+
+## Como rodar o projeto
+
+```bash
+# Instale as dependências
+npm install
+# ou
+yarn install
+
+# Rode o projeto em modo desenvolvimento
+npm run dev
+# ou
+yarn dev
+```
+
+Acesse: http://localhost:3000
+
+---
+
+## Observações
+- O backend deve estar rodando e configurado para autenticação.
+- Variáveis de ambiente para integração com Slack, Google OAuth, etc., devem estar presentes no `.env.local`.
+- Para personalizar estilos, edite os arquivos em `src/styles`.
+
+---
+
+## Licença
+MIT
 
 # Next.js 15 Template
 
@@ -61,6 +123,7 @@ src/
 │ 
 ├── config/                  # Configurações do projeto
 │   ├── env.ts              # Variáveis de ambiente
+│   ├── slack.ts            # Integração com o Slack
 │   ├── hrefs.ts            # URLs do projeto
 │   └── routes.ts           # Configurações de rotas
 ├── lib/                     # Bibliotecas e utilitários
@@ -69,8 +132,7 @@ src/
 ├── services/                # Serviços e integrações
 │   ├── fetch/              # Serviços de requisição HTTP
 │   ├── i18n/               # Configuração de internacionalização
-│   ├── reactQuery/         # Configuração do React Query
-│   └── requests/           # Configuração de requisições
+│   └── reactQuery/         # Configuração do React Query
 ├── server/                 # Servidor e integrações
 │   ├── actions/            # Ações do servidor
 │   ├── logger/             # Logger do servidor
@@ -166,13 +228,6 @@ SLACK_ICON_EMOJI=:emoji: (opcional)
 - Português (Brasil)
 - Inglês (Estados Unidos)
 
-## 🤝 Contribuição
-
-1. Faça um fork do repositório
-2. Crie uma branch (`git checkout -b feature/AmazingFeature`)
-3. Commit suas mudanças (`git commit -m 'Add some AmazingFeature'`)
-4. Push para a branch (`git push origin feature/AmazingFeature`)
-5. Abra um Pull Request
 
 ## 📝 Licença
 

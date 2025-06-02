@@ -2,34 +2,21 @@ import { Dictionary } from 'src/types/i18n-types';
 
 const pt: Dictionary = {
   common: {
-    companyName: 'Acme Inc.',
+    companyName: 'Conectar UserHub',
     welcome: 'Bem-vindo!',
     increment: 'Incrementar',
     decrement: 'Decrementar',
-    signOut: 'SignOut',
-    signIn: 'SignIn',
-    signUp: 'SignUp',
+    signOut: 'Sair',
+    signIn: 'Entrar',
+    signUp: 'Cadastrar',
+    signInToContinue: 'Entrar para continuar',
+    signUpToContinue: 'Cadastrar para continuar',
+    getStarted: 'Começar',
   },
+
   home: {
-    title: 'Template Next.js',
-    description: 'Um template pronto para produção com tecnologias modernas e melhores práticas',
-    features: {
-      title: 'Recursos',
-      items: [
-        'Server Components & Server Actions',
-        'App Router (Next.js 15)',
-        'Modo Claro/Escuro',
-        'Internacionalização (i18n)',
-        'Autenticação',
-        'Design Responsivo',
-        'TypeScript',
-      ],
-    },
-    cta: {
-      title: 'Pronto para começar seu projeto?',
-      description: 'Comece com nosso template e construa aplicações incríveis.',
-      button: 'Começar Agora',
-    },
+    title: 'Bem-vindo ao Conectar UserHub',
+    description: 'Faça login para continuar',
   },
   auth: {
     signIn: {

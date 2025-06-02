@@ -1,25 +1,18 @@
 import { routesBackend } from 'src/config/routes';
 import { User } from 'src/types/auth';
 import { ZodTypeAny, z } from 'zod';
-import { UserSchema } from '../requests/schemas';
 import { toast } from 'sonner';
 import { hrefs } from 'src/config/hrefs';
 import { fetchWrapper } from './Wrapper';
 import { revalidateTag } from 'next/cache';
-
-/**
- * Wrapper para fetch com tratamento centralizado de erros e validação opcional via Zod.
- * Sempre lança o erro após tratar (não faz throw/reject duplo).
- */
-
 import { CACHE_TAGS } from './cache-keys';
+import { UserSchema } from './schemas';
 
 export async function fetchClient<T>(args: {
   input: URL | RequestInfo;
   init?: RequestInit;
   schemaValidator?: ZodTypeAny;
 }): Promise<T> {
-  // Adiciona token JWT do cookie ao header Authorization, se existir
   const headers = new Headers(args.init?.headers || {});
   try {
     // const token = CookieManager.get<string>(Cookie_Keys.token);
@@ -57,7 +50,6 @@ export async function fetchClient<T>(args: {
   });
 }
 
-// Exemplo de uso: buscar usuário logado
 export const GetMe = () =>
   fetchClient<User>({
     input: routesBackend.auth.me,
@@ -65,7 +57,6 @@ export const GetMe = () =>
     schemaValidator: UserSchema,
   });
 
-// Exemplo de uso: buscar todos usuários
 export const GetUsers = () =>
   fetchClient<User[]>({
     input: routesBackend.users.getAll,
@@ -73,7 +64,6 @@ export const GetUsers = () =>
     schemaValidator: z.array(UserSchema),
   });
 
-// Exemplo de uso: criar usuário
 export const PostUser = async (user: User) => {
   const created = await fetchClient<User>({
     input: routesBackend.users.create,

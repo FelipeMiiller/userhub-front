@@ -7,7 +7,7 @@ import { hrefs } from 'src/config/hrefs';
 import { SignInFormSchema, SignUpFormSchema } from 'src/lib/validators/auth.validators';
 import HTTP_STATUS from 'src/lib/constants/http-status-codes';
 
-import { logError, logWarn } from '../logger';
+import { logError, logInfo, logWarn } from '../logger';
 
 const { signin, signup } = routesBackend.auth;
 export async function signUp(
@@ -35,10 +35,8 @@ export async function signUp(
     body: JSON.stringify({
       Email: validationFields.data.email,
       Password: validationFields.data.password,
-      Profile: {
-        Name: validationFields.data.name,
-        LastName: validationFields.data.lastname,
-      },
+      Name: validationFields.data.name,
+      LastName: validationFields.data.lastname,
     }),
   });
 
@@ -54,6 +52,10 @@ export async function signUp(
   if (response.ok) {
     redirect(hrefs.auth.signIn);
   }
+
+  logInfo('signUp', response.statusText, {
+    email: validationFields.data.email,
+  });
   return {
     status: response.status,
     message: response.statusText,
@@ -106,6 +108,9 @@ export async function signIn(
       };
       return result;
     }
+    logInfo('signIn', 'Authentication successful', {
+      email: validatedFields.data.email,
+    });
     const { data } = await response.json();
 
     await createSession({

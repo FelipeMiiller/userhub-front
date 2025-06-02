@@ -2,34 +2,20 @@ import { Dictionary } from 'src/types/i18n-types';
 
 const en: Dictionary = {
   common: {
-    companyName: 'Acme Inc.',
+    companyName: 'Conectar UserHub',
     welcome: 'Welcome!',
     increment: 'Increment',
     decrement: 'Decrement',
     signOut: 'SignOut',
     signIn: 'SignIn',
     signUp: 'SignUp',
+    signInToContinue: 'Sign in to continue',
+    signUpToContinue: 'Sign up to continue',
+    getStarted: 'Get Started',
   },
   home: {
-    title: 'Next.js Template',
-    description: 'A production-ready template with modern technologies and best practices',
-
-    features: {
-      title: 'Features',
-      items: [
-        'Server Components & Server Actions',
-        'App Router (Next.js 15)',
-        'Internationalization (i18n)',
-        'Authentication',
-        'Responsive Design',
-        'TypeScript',
-      ],
-    },
-    cta: {
-      title: 'Ready to start your project?',
-      description: 'Get started with our template and build amazing applications.',
-      button: 'Get Started',
-    },
+    title: 'Welcome to Conectar UserHub',
+    description: 'Sign in to continue',
   },
   auth: {
     signIn: {

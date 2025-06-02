@@ -1,3 +1,8 @@
+export enum Roles {
+  ADMIN = 'ADMIN',
+  USER = 'USER',
+}
+
 export type Payload = {
   email: string;
   sub: string;
@@ -10,26 +15,14 @@ export type Session = {
 };
 
 export type User = {
+  Id: string;
   Email: string;
-  Id: string;
-  Perfil?: Perfil | null;
+  Name: string;
+  LastName: string | null;
+  AvatarUrl: string | null;
   Role: Roles;
-};
-
-export enum Roles {
-  ADMIN = 'ADMIN',
-  USER = 'USER',
-  MODERATOR = 'MODERATOR',
-}
-
-export type Perfil = {
-  Id: string;
-  Nome: string;
-  Sobrenome: string | null;
-  DataNasc: Date | null;
-  Telefone: string | null;
-  Celular: string | null;
-  FotoUrl: string | null;
-  UpdatedAt?: Date;
+  Status: boolean;
+  LastLoginAt: Date | null;
   CreatedAt: Date;
+  UpdatedAt: Date;
 };

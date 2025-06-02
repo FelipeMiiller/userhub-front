@@ -1,10 +1,11 @@
 import { GalleryVerticalEnd } from 'lucide-react';
 import { ReactLogo } from 'src/components/react-logo';
-import { getDictionary } from 'src/services/i18n/get-dictionary';
+
 import { Locale } from 'src/types/i18n-types';
 import { SignUpForm } from './components/signup-form';
 import { Dictionary } from 'src/types/i18n-types';
 import { hrefs } from '@/config/hrefs';
+import { getDictionary } from '@/services/i18n';
 
 export default async function SignUpPage({ params }: { params: Promise<{ lang: Locale }> }) {
   const { lang } = await params;

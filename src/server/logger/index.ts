@@ -53,17 +53,8 @@ function logWarn(context: string, message: string, data: Record<string, any> = {
   logger.warn(message, data);
 }
 
-/**
- * Registra uma mensagem de depuração
- * @param context Contexto da mensagem (geralmente o nome do módulo)
- * @param message Mensagem de depuração
- * @param data Dados adicionais para registro
- */
-function logDebug(context: string, message: string, data: Record<string, any> = {}): void {
-  const logger = createLogger(context);
-  logger.debug(message, data);
-}
+
 
 // Export a default object with all the logging functions
 
-export { createLogger, logError, logInfo, logWarn, logDebug };
+export { createLogger, logError, logInfo, logWarn};

@@ -7,21 +7,14 @@ interface CommonTranslations {
   signOut: string;
   signIn: string;
   signUp: string;
+  signInToContinue: string;
+  signUpToContinue: string;
+  getStarted: string;
 }
 
 interface HomeTranslations {
   title: string;
   description: string;
-
-  features: {
-    title: string;
-    items: string[];
-  };
-  cta: {
-    title: string;
-    description: string;
-    button: string;
-  };
 }
 
 // Interface translations
