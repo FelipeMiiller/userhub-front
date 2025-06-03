@@ -1,7 +1,5 @@
 import { GalleryVerticalEnd } from 'lucide-react';
 import { ReactLogo } from 'src/components/react-logo';
-
-import { Locale } from 'src/types/i18n-types';
 import { SignUpForm } from './components/signup-form';
 import { hrefs } from '@/config/hrefs';
 import { companyName } from '@/config/metadata';

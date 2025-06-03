@@ -64,7 +64,7 @@ export async function middleware(request: NextRequest) {
   } catch (error) {
     // Tratamento global de erros
     console.error('Erro no middleware:', error);
-    logError('Erro no middleware:', error);
+    
     // await deleteSession();
     return NextResponse.redirect(new URL(hrefs.auth.signIn, request.nextUrl.origin));
   }
