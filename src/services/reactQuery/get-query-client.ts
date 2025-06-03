@@ -49,7 +49,7 @@ export default function GetQueryClient() {
 }
 
 // Função para invalidar apenas a query do usuário
-export function invalidateQueries(queryKey: string[]) {
+export function invalidateQueries(queryKey?: string[]) {
   // React Query Client para invalidar cache
   const queryClient = GetQueryClient();
   queryClient.invalidateQueries({ queryKey });

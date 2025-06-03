@@ -53,8 +53,6 @@ function logWarn(context: string, message: string, data: Record<string, any> = {
   logger.warn(message, data);
 }
 
-
-
 // Export a default object with all the logging functions
 
-export { createLogger, logError, logInfo, logWarn};
+export { createLogger, logError, logInfo, logWarn };

@@ -29,31 +29,17 @@ export class CookieManager {
    * @param name Nome do cookie
    * @returns O valor do cookie tipado ou undefined
    */
-  static get<T>(name: string): T | undefined {
+  static get(name: string): string | undefined {
     if (typeof window === 'undefined') return undefined;
 
-    try {
-      const value = Cookies.get(name);
-      if (!value) return undefined;
-
-      return JSON.parse(value) as T;
-    } catch (e) {
-      console.error(`Erro ao obter cookie "${name}":`, e);
-      return undefined;
-    }
+    return Cookies.get(name);
   }
 
-  /**
-   * Define um cookie
-   * @param name Nome do cookie
-   * @param value Valor do cookie (será convertido para JSON)
-   * @param options Opções do cookie
-   */
-  static set<T>(name: string, value: T, options: CookieOptions = {}): void {
+  static set(name: string, value: string, options: CookieOptions = {}): void {
     if (typeof window === 'undefined') return;
 
     const finalOptions = { ...this.DEFAULT_OPTIONS, ...options };
-    Cookies.set(name, JSON.stringify(value), finalOptions);
+    Cookies.set(name, value, finalOptions);
   }
 
   /**
