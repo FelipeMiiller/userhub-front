@@ -1,9 +1,8 @@
 <div align="center">
-  <img src="https://raw.githubusercontent.com/vercel/next.js/canary/examples/with-tailwindcss/public/next.svg" width="120" alt="Next.js Logo" />
+  <img src="https://upload.wikimedia.org/wikipedia/commons/a/a7/React-icon.svg" width="120" alt="React Logo" />
 </div>
 
 # Frontend - UserHub
-
 Sistema de autenticação e gerenciamento de usuários
 
 ---
@@ -44,37 +43,11 @@ Sistema de autenticação e gerenciamento de usuários
 
 ---
 
-## Como rodar o projeto
-
-```bash
-# Instale as dependências
-npm install
-# ou
-yarn install
-
-# Rode o projeto em modo desenvolvimento
-npm run dev
-# ou
-yarn dev
-```
-
-Acesse: http://localhost:3000
-
----
-
 ## Observações
 - O backend deve estar rodando e configurado para autenticação.
 - Variáveis de ambiente para integração com Slack, Google OAuth, etc., devem estar presentes no `.env.local`.
 - Para personalizar estilos, edite os arquivos em `src/styles`.
 
----
-
-## Licença
-MIT
-
-# Next.js 15 Template
-
-Este template oferece uma base robusta para desenvolvimento com Next.js 15, incluindo integração com React Query 5, VLibras, e uma estrutura de testes completa.
 
 ## 🚀 Tecnologias Principais
 
@@ -103,11 +76,6 @@ Este template oferece uma base robusta para desenvolvimento com Next.js 15, incl
 - Tratamento de erros detalhado
 - Redirecionamento inteligente pós-autenticação
 
-### 🌐 Internacionalização (i18n)
-- Suporte a múltiplos idiomas (inglês e português)
-- Sistema de dicionários centralizado
-- Roteamento com suporte a idiomas
-- Troca de idioma dinâmica
 
 ## 📁 Estrutura de Pastas
 
@@ -131,7 +99,6 @@ src/
 │   └── utils/              # Funções utilitárias
 ├── services/                # Serviços e integrações
 │   ├── fetch/              # Serviços de requisição HTTP
-│   ├── i18n/               # Configuração de internacionalização
 │   └── reactQuery/         # Configuração do React Query
 ├── server/                 # Servidor e integrações
 │   ├── actions/            # Ações do servidor
