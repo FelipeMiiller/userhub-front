@@ -1,23 +1,44 @@
 import { Metadata } from 'next';
-import { enMetadata } from './en';
-import { ptMetadata } from './pt';
-import { Locale } from '@/types/i18n-types';
+import { envPublic } from '../env.public';
 
-export const metadataByLocale: Record<Locale, Metadata> = {
-  en: enMetadata,
-  pt: ptMetadata,
-};
+const appUrl = envPublic.appUrl;
+export const companyName = 'Acme Inc.';
 
-export const defaultMetadata: Metadata = {
-  metadataBase: new URL('https://yoursite.com'),
-  title: 'Next.js Template',
-  description: 'A modern and feature-rich Next.js template',
-  authors: [{ name: 'Your Company' }],
+export const staticMetadata: Metadata = {
+  metadataBase: new URL(appUrl),
+  title: `${companyName} - Portal de Usuários`,
+
+  description: `Portal de gerenciamento de usuários da ${companyName}`,
+  keywords: ['next.js', 'template', 'typescript', 'react', 'pt-br'],
+  authors: [{ name: companyName }],
   openGraph: {
     type: 'website',
-    siteName: 'Next.js Template',
+
+    locale: 'pt_BR',
+    url: appUrl,
+    siteName: companyName,
+    title: `${companyName} - Portal de Usuários`,
+    description: 'Um template moderno e rico em recursos para Next.js',
+    images: [
+      {
+        url: '/og-image-pt.jpg',
+        width: 1200,
+        height: 630,
+        alt: 'Template Next.js',
+      },
+    ],
   },
   twitter: {
     card: 'summary_large_image',
+    title: `${companyName} - Portal de Usuários`,
+    description: `Portal de gerenciamento de usuários da ${companyName}`,
+    images: ['/twitter-image-pt.jpg'],
+  },
+  alternates: {
+    canonical: appUrl,
+    languages: {
+      'pt-BR': appUrl + '/pt',
+      'en-US': appUrl + '/en',
+    },
   },
 };

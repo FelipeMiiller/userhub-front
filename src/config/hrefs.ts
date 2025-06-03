@@ -9,5 +9,7 @@ export const hrefs = {
   },
   interface: {
     index: '/interface',
+    admin: '/interface/admin',
+    profile: '/interface/profile',
   },
 };
