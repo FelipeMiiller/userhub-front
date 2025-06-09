@@ -1,46 +1,48 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
-import { deleteSession, getSession, refreshToken } from './server/actions/session.actions';
+import { deleteSession, getSession } from './server/actions/session.actions';
 import { hrefs } from './config/hrefs';
 import { decodeJwt } from 'jose';
 import { Roles } from './types/auth';
 
-import { logError } from './server/logger';
-
 // Rotas que requerem permissão de administrador
 const adminRoutes = [
   '/interface/admin',
+
   // Adicione outras rotas administrativas aqui
 ];
+const userRoutes = ['/interface/profile'];
 
 export async function middleware(request: NextRequest) {
   try {
     // Verificar se existe uma sessão
     const session = await getSession();
 
-    if (!session?.refreshToken) {
-      await deleteSession();
+    const currentPath = request.nextUrl.pathname;
+    const isAdminRoute = adminRoutes.some((route) => currentPath.startsWith(route));
+    const isUserRoute = userRoutes.some((route) => currentPath.startsWith(route));
+
+    if (!session) {
       return NextResponse.redirect(new URL(hrefs.auth.signIn, request.nextUrl.origin));
     }
 
-
-    if (!session?.accessToken) {
+    if (isUserRoute) {
       try {
-        const accessToken = await refreshToken(session.refreshToken);
-        if (!accessToken) {
-          await deleteSession();
+        // Decodificar o token para verificar o papel do usuário
+        const payload = decodeJwt(session.accessToken);
+        const userRole = payload.role as Roles;
+        console.log('userRole', userRole);
+        if (userRole !== Roles.USER) {
+          // Redirecionar usuários comuns para a página de perfil
+          console.log('Acesso negado: usuário não é administrador');
           return NextResponse.redirect(new URL(hrefs.auth.signIn, request.nextUrl.origin));
         }
       } catch (error) {
-        console.error('Erro ao renovar token:', error);
+        console.error('Erro ao verificar permissões:', error);
         await deleteSession();
         return NextResponse.redirect(new URL(hrefs.auth.signIn, request.nextUrl.origin));
       }
     }
-
-
-    const currentPath = request.nextUrl.pathname;
-    const isAdminRoute = adminRoutes.some((route) => currentPath.startsWith(route));
 
     if (isAdminRoute) {
       try {
@@ -64,7 +66,7 @@ export async function middleware(request: NextRequest) {
   } catch (error) {
     // Tratamento global de erros
     console.error('Erro no middleware:', error);
-    
+
     // await deleteSession();
     return NextResponse.redirect(new URL(hrefs.auth.signIn, request.nextUrl.origin));
   }

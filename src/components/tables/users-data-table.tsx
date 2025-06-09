@@ -26,7 +26,10 @@ import {
   IconChevronRight,
   IconChevronsLeft,
   IconChevronsRight,
+  IconCircleCheckFilled,
+  IconDotsVertical,
   IconLayoutColumns,
+  IconLoader,
 } from '@tabler/icons-react';
 import {
   ColumnDef,
@@ -54,6 +57,8 @@ import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
   DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { Input } from '@/components/ui/input';
@@ -160,13 +165,40 @@ const columns: ColumnDef<UserTable>[] = [
     },
   },
   {
-    accessorKey: 'Status',
-    header: 'Status',
+    accessorKey: "Status",
+    header: "Status",
     cell: ({ row }) => (
-      <Badge variant={row.getValue('Status') ? 'default' : 'destructive'}>
-        {row.getValue('Status') ? 'Ativo' : 'Inativo'}
+      <Badge variant="outline" className="text-muted-foreground px-1.5">
+        {row.original.Status === true ? (
+          <IconCircleCheckFilled className="fill-green-500 dark:fill-green-400" />
+        ) : (
+          <IconLoader />
+        )}
+        {row.original.Status === true ? "Ativo" : "Inativo"}
       </Badge>
     ),
+  },
+  {
+    accessorKey: 'LastLoginAt',
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+        >
+          Ultimo Login
+          <IconChevronDown className="ml-2 h-4 w-4" />
+        </Button>
+      );
+    },
+    cell: ({ row }) => {
+      const date = row.getValue('LastLoginAt');
+      const formatted =
+        date instanceof Date
+          ? date.toLocaleDateString('pt-BR', { dateStyle: 'short' })
+          : new Date(date as string).toLocaleDateString('pt-BR', { dateStyle: 'short' });
+      return <div>{formatted}</div>;
+    },
   },
   {
     accessorKey: 'CreatedAt',
@@ -191,23 +223,38 @@ const columns: ColumnDef<UserTable>[] = [
     },
   },
   {
-    id: 'actions',
-    header: 'Ações',
-    cell: ({ row }) => (
-      <div className="flex gap-2">
+    id: "actions",
+    cell: ({ row }) => {
+
+ 
+
+
+      return (
+      <DropdownMenu>
         <EditUserFormDialog
           user={row.original}
           trigger={
-            <Button size="sm" variant="outline" className="cursor-pointer">
-              Editar
-            </Button>
+            <div></div>
           }
         />
-        <Button size="sm" variant="destructive" className="cursor-pointer">
-          Excluir
-        </Button>
-      </div>
-    ),
+        <DropdownMenuTrigger asChild>
+          <Button
+            variant="ghost"
+            className="data-[state=open]:bg-muted text-muted-foreground flex size-8"
+            size="icon"
+          >
+            <IconDotsVertical />
+            <span className="sr-only">Open menu</span>
+          </Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent align="end" className="w-32">
+          <DropdownMenuItem onClick={() => window.document.getElementById(`edit-user-dialog-${row.original.Id}`)?.click()}>Editar  </DropdownMenuItem>
+          <DropdownMenuSeparator />
+          <DropdownMenuItem variant="destructive">Excluir</DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
+    )
+    },
   },
 ];
 
@@ -297,7 +344,7 @@ export function UsersDataTable({ data: initialData }: { data: User[] }) {
   }
 
   return (
-    <Tabs defaultValue="outline" className="w-full flex-col justify-start gap-6">
+    <Tabs defaultValue="outline" className="w-full flex-col justify-start gap-2">
       <div className="flex items-center justify-between ">
         <div className="flex items-center gap-2">
           <Input
@@ -353,7 +400,7 @@ export function UsersDataTable({ data: initialData }: { data: User[] }) {
       </div>
       <TabsContent
         value="outline"
-        className="relative flex flex-col gap-4 overflow-auto px-4 lg:px-6"
+        className="relative flex flex-col gap-4 overflow-auto px-2 "
       >
         <div className="overflow-hidden rounded-lg border">
           <DndContext

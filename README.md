@@ -36,7 +36,7 @@ Sistema de autenticação e gerenciamento de usuários
 - **Estado Global:** Context API ou Redux
 - **HTTP Client:** Axios ou Fetch API
 - **Estilo:** TailwindCSS, Styled Components ou CSS Modules
-- **Login Social (Opcional):** react-google-login, msal-react
+- **Login Social :** via backend Google
 
 ## Responsividade
 - Compatível com dispositivos móveis e desktops
@@ -186,14 +186,12 @@ SLACK_ICON_EMOJI=:emoji: (opcional)
 
 - [Documentação do Next.js](https://nextjs.org/docs)
 - [Documentação do React Query](https://tanstack.com/query/latest/docs)
-- [Next-Intl (i18n)](https://next-intl-docs.vercel.app/)
-- [Next-Auth](https://next-auth.js.org/)
 - [Documentação do VLibras](https://vlibras.gov.br/)
 
 ## 🌍 Idiomas Suportados
 
 - Português (Brasil)
-- Inglês (Estados Unidos)
+
 
 
 ## 📝 Licença

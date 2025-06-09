@@ -10,7 +10,7 @@ export const routesBackend = {
     signin: `${envPrivate.backendUrl}/auth/signin`,
     signout: `${envPrivate.backendUrl}/auth/signout`,
     signup: `${envPrivate.backendUrl}/auth/signup`,
-    refresh: `${envPrivate.backendUrl}/auth/refresh`,
+    refreshToken: `${envPrivate.backendUrl}/auth/refreshToken`,
     forgotPassword: `${envPrivate.backendUrl}/auth/forgot-password`,
     me: `${envPrivate.backendUrl}/auth/me`,
   },
@@ -21,5 +21,6 @@ export const routesBackend = {
     getOne: `${envPrivate.backendUrl}/users/:id`,
     update: `${envPrivate.backendUrl}/users/:id`,
     delete: `${envPrivate.backendUrl}/users/:id`,
+    inactive: `${envPrivate.backendUrl}/users/inactive/:days`,
   },
 };

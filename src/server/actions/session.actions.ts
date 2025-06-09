@@ -22,6 +22,8 @@ export async function deleteSession() {
         'Content-Type': 'application/json',
         'Authorization': `bearer ${accessToken}`,
       },
+    }).catch(() => {
+      console.log('Erro ao deslogar');
     });
     // Limpar cookies
     cookiesStore.delete(Cookie_Keys.token);
@@ -29,27 +31,15 @@ export async function deleteSession() {
   } catch {}
 }
 
-export async function getSession(): Promise<Session> {
-  const cookiesStore = await cookies();
-  const accessToken = cookiesStore.get(Cookie_Keys.token)?.value;
-  const refreshToken = cookiesStore.get(Cookie_Keys.refreshToken)?.value;
-
-  if (!accessToken || !refreshToken) {
-    throw new UnauthorizedException(UnauthorizedException.INVALID_TOKEN);
-  }
-
-  return { accessToken, refreshToken };
-}
-
-export const refreshToken = async (oldRefreshToken: string): Promise<string> => {
+export const revalidateToken = async (RefreshToken: string) => {
   try {
-    const response = await fetch(routesBackend.auth.refresh, {
+    const response = await fetch(routesBackend.auth.refreshToken, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        refresh: oldRefreshToken,
+        refreshToken: RefreshToken,
       }),
     });
 
@@ -61,16 +51,48 @@ export const refreshToken = async (oldRefreshToken: string): Promise<string> => 
       throw new UnauthorizedException(error);
     }
 
-    const { accessToken } = await response.json();
+    const responseData = await response.json();
+    if (!responseData.data || !responseData.data.accessToken) {
+      console.error('[revalidateToken] Invalid response structure from backend:', responseData);
+      throw new Error('Invalid response structure from backend: accessToken missing.');
+    }
+    const { accessToken } = responseData.data;
 
     await setTokenCookie({ token: accessToken });
     return accessToken;
-  } catch {
+  } catch (error) {
+    console.error('[revalidateToken] Error during token revalidation:', error);
     await deleteSession();
-
-    throw new UnauthorizedException(UnauthorizedException.INVALID_TOKEN);
   }
 };
+export async function getSession(): Promise<Session> {
+  const cookiesStore = await cookies();
+  let accessToken = cookiesStore.get(Cookie_Keys.token)?.value;
+  const refreshToken = cookiesStore.get(Cookie_Keys.refreshToken)?.value;
+
+  if (!accessToken && refreshToken) {
+    try {
+      accessToken = await revalidateToken(refreshToken);
+    } catch (revalidationError) {
+      console.error(
+        '[getSession] Revalidation failed. Error propagated from revalidateToken:',
+        revalidationError,
+      );
+      deleteSession();
+    }
+  }
+
+  if (!accessToken || !refreshToken) {
+    const currentAccessToken = cookiesStore.get(Cookie_Keys.token)?.value;
+    const currentRefreshToken = cookiesStore.get(Cookie_Keys.refreshToken)?.value;
+    if (currentAccessToken || currentRefreshToken) {
+      await deleteSession();
+    }
+    throw new UnauthorizedException(UnauthorizedException.INVALID_TOKEN);
+  }
+
+  return { accessToken, refreshToken };
+}
 
 export async function setTokenCookie({ token }: { token: string }) {
   if (!token) {

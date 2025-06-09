@@ -6,14 +6,15 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
 export function useUsers() {
   const queryClient = useQueryClient();
-
   const {
     data: users,
     isLoading,
     error,
+    refetch,
   } = useQuery<User[]>({
     queryKey: [QueryKeys.user.list],
     queryFn: async () => await GetUsers(),
+    retry: 3,
   });
 
   const updateUser = useMutation({
@@ -41,7 +42,7 @@ export function useUsers() {
     isLoading,
     updateUser,
     createUser,
-
+    refetch,
     invalidateUser: () => invalidateQueries([QueryKeys.user.list]),
   };
 }

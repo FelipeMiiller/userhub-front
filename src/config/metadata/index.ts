@@ -2,7 +2,7 @@ import { Metadata } from 'next';
 import { envPublic } from '../env.public';
 
 const appUrl = envPublic.appUrl;
-export const companyName = 'Acme Inc.';
+export const companyName = 'UserHub Inc.';
 
 export const staticMetadata: Metadata = {
   metadataBase: new URL(appUrl),

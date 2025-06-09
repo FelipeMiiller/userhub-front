@@ -9,14 +9,13 @@ export function useAuth() {
   const {
     data: user,
     isLoading,
-    isError,
+
     error,
     refetch,
   } = useQuery({
     queryKey: [QueryKeys.user.root],
     queryFn: async () => await GetMe(),
-
-    retry: false,
+    retry: 3,
   });
   const updateSession = useMutation({
     mutationFn: async ({ data }: { data: UpdateUser }) =>
@@ -31,9 +30,8 @@ export function useAuth() {
     session: user,
     refetch,
     error,
-    isError,
     updateSession,
-    invalidateAll: invalidateQueries,
+    invalidateAll: () => invalidateQueries(),
     invalidateSession: () => invalidateQueries([QueryKeys.user.root]),
   };
 }

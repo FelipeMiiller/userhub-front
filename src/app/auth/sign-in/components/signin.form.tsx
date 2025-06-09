@@ -16,13 +16,14 @@ import { hrefs } from 'src/config/hrefs';
 import { redirect } from 'next/navigation';
 import HTTP_STATUS from 'src/lib/constants/http-status-codes';
 import { handleValidationZodToast } from '@/components/utils';
-import { useAuth } from '@/hooks/useAuth';
+import { invalidateQueries } from '@/services/reactQuery/get-query-client';
+import { QueryKeys } from '@/lib/constants/query-keys';
 
 export function SignInForm({ className, ...props }: React.ComponentPropsWithoutRef<'form'>) {
   const [state, action, isPending] = useActionState(signIn, undefined);
-  const { invalidateSession } = useAuth();
 
   useEffect(() => {
+    invalidateQueries([QueryKeys.user.root]);
     if (!state) return;
 
     switch (state.status) {

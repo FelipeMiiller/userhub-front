@@ -6,15 +6,21 @@ import { CACHE_TAGS } from './cache-keys';
 import { Cookie_Keys } from '@/lib/constants/cookies-keys';
 import Cookies from 'js-cookie';
 import { CreateUser, UpdateUser, User } from '@/types';
+import { envPublic } from '@/config/env.public';
 
 export async function fetchClient<T>(args: { input: URL | RequestInfo; init?: RequestInit }) {
   const headers = new Headers(args.init?.headers || {});
   try {
     const token = Cookies.get(Cookie_Keys.token);
-    if (token) {
-      headers.set('Authorization', `bearer ${token}`);
+    if (!token) {
+      throw new Error('Erro na requisição HTTP: token não encontrado');
     }
-  } catch {}
+
+    headers.set('Authorization', `bearer ${token}`);
+  } catch {
+    toast('Erro na requisição HTTP: token não encontrado');
+    window.location.href = hrefs.auth.signIn;
+  }
   const initWithAuth: RequestInit = { ...args.init, headers };
 
   try {
@@ -45,12 +51,27 @@ export async function fetchClient<T>(args: { input: URL | RequestInfo; init?: Re
           });
           console.error(`Recurso não encontrado: ${status}`);
           break;
+
         case 409:
           toast('Conflito', {
             description: 'Já existe um recurso com os mesmos dados. Verifique e tente novamente.',
           });
           console.error(`Conflito de dados: ${status}`);
           break;
+        case 422:
+          toast('Erro de Validação', {
+            description: 'Os dados enviados são inválidos. Verifique e tente novamente.',
+          });
+          console.error(`Erro de validação: ${status}`);
+          break;
+
+        case 429:
+          toast('Muitas Tentativas', {
+            description: 'Você excedeu o limite de tentativas. Tente novamente mais tarde.',
+          });
+          console.error(`Muitas tentativas: ${status}`);
+          break;
+
         case 500:
           toast('Erro do Servidor', {
             description: 'Ocorreu um erro no servidor. Tente novamente mais tarde.',
@@ -88,10 +109,13 @@ export const GetMe = async () =>
 export const GetUsers = async () =>
   await fetchClient<User[]>({
     input: routesBackend.users.getAll,
-    init: { method: 'GET', next: { tags: [CACHE_TAGS.USERS] } },
+    init: {
+      method: 'GET',
+      next: { tags: [CACHE_TAGS.USERS], revalidate: envPublic.revalidateSeconds },
+    },
   });
 
-export const PostUser = async (user: CreateUser) =>
+export const PostUser = async (user: CreateUser): Promise<User> =>
   await fetchClient<User>({
     input: routesBackend.users.create,
     init: {
@@ -101,8 +125,8 @@ export const PostUser = async (user: CreateUser) =>
     },
   });
 
-export const PutUser = async ({ id, user }: { id: string; user: UpdateUser }) => {
-  const updated = await fetchClient<User>({
+export const PutUser = async ({ id, user }: { id: string; user: UpdateUser }): Promise<User> =>
+  await fetchClient<User>({
     input: routesBackend.users.update.replace(':id', id),
     init: {
       method: 'PATCH',
@@ -110,14 +134,7 @@ export const PutUser = async ({ id, user }: { id: string; user: UpdateUser }) =>
       body: JSON.stringify(user),
     },
   });
-  return updated;
-};
 
-/**
- * Exclui um usuário pelo ID
- * @param userId ID do usuário a ser excluído
- * @returns void
- */
 export const DeleteUser = async (userId: string) => {
   await fetchClient({
     input: routesBackend.users.delete.replace(':id', userId),
@@ -128,3 +145,17 @@ export const DeleteUser = async (userId: string) => {
   });
   return true;
 };
+
+/**
+ * Busca usuários inativos (sem login recente)
+ * @param days dias sem login
+ * @returns lista de usuários inativos
+ */
+export const GetInactiveUsers = async (days: number) =>
+  await fetchClient<User[]>({
+    input: routesBackend.users.inactive.replace(':days', days.toString()),
+    init: {
+      method: 'GET',
+      next: { tags: [CACHE_TAGS.USERS], revalidate: envPublic.revalidateSeconds },
+    },
+  });

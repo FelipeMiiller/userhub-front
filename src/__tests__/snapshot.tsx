@@ -1,10 +1,10 @@
 /**
  * @jest-environment jsdom
  */
+import HomePage from '@/app/page';
 import { render } from '@testing-library/react';
-import HomePage from '@/app/[lang]/page';
 
 it('renders homepage unchanged', () => {
-  const { container } = render(<HomePage params={Promise.resolve({ lang: 'pt' })} />);
+  const { container } = render(<HomePage />);
   expect(container).toMatchSnapshot();
 });

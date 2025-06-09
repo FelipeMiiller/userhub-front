@@ -2,7 +2,7 @@
 
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import {
   Dialog,
@@ -24,12 +24,14 @@ import { EditUserSchema, EditUserFormValues } from '@/lib/validators/users.valid
 type EditUserFormDialogProps = {
   user: User;
   trigger?: React.ReactNode;
+
+ 
 };
 
-export function EditUserFormDialog({ user, trigger }: EditUserFormDialogProps) {
+export function EditUserFormDialog({ user, trigger}: EditUserFormDialogProps) {
+
   const { updateUser } = useUsers();
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [open, setOpen] = useState(false);
   const {
     register,
     handleSubmit,
@@ -46,6 +48,9 @@ export function EditUserFormDialog({ user, trigger }: EditUserFormDialogProps) {
     },
   });
 
+
+
+
   const onSubmit = async (data: EditUserFormValues) => {
     setIsSubmitting(true);
     try {
@@ -55,15 +60,15 @@ export function EditUserFormDialog({ user, trigger }: EditUserFormDialogProps) {
 
       await updateUser.mutateAsync({ id: user.Id, data: userData });
       reset();
-      setOpen(false);
+     window.document.getElementById('edit-user-dialog')?.click();
     } finally {
       setIsSubmitting(false);
     }
   };
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild>{trigger || <Button variant="outline">Editar</Button>}</DialogTrigger>
+    <Dialog>
+      <DialogTrigger id={`edit-user-dialog-${user.Id}`} asChild>{trigger || <Button variant="outline">Editar</Button>}</DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
           <DialogTitle>Editar Usuário</DialogTitle>

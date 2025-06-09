@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 import { hrefs } from '@/config/hrefs';
 import Link from 'next/link';
 import { ArrowRight } from 'lucide-react';
-
+import { companyName } from '@/config/metadata';
 export default function HomePage() {
   return (
     <div
@@ -15,7 +15,7 @@ export default function HomePage() {
         <ReactLogo size={140} />
 
         <div className="text-center">
-          <h1 className="text-5xl font-bold mb-2">UserHub</h1>
+          <h1 className="text-5xl font-bold mb-2">{companyName}</h1>
           <p className="text-xl text-muted-foreground">Sistema de Gestão de Usuários</p>
         </div>
 
