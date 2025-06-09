@@ -1,26 +1,26 @@
-import { envPrivate } from './env.private';
+
 import { envPublic } from './env.public';
 
 export const routesBackend = {
   auth: {
     google: {
-      login: `${envPrivate.backendUrl}/auth/google/signin`,
+      login: `${envPublic.backendUrl}/auth/google/signin`,
       callback: `${envPublic.appUrl}/api/auth/google/callback`,
     },
-    signin: `${envPrivate.backendUrl}/auth/signin`,
-    signout: `${envPrivate.backendUrl}/auth/signout`,
-    signup: `${envPrivate.backendUrl}/auth/signup`,
-    refreshToken: `${envPrivate.backendUrl}/auth/refreshToken`,
-    forgotPassword: `${envPrivate.backendUrl}/auth/forgot-password`,
-    me: `${envPrivate.backendUrl}/auth/me`,
+    signin: `${envPublic.backendUrl}/auth/signin`,
+    signout: `${envPublic.backendUrl}/auth/signout`,
+    signup: `${envPublic.backendUrl}/auth/signup`,
+    refreshToken: `${envPublic.backendUrl}/auth/refreshToken`,
+    forgotPassword: `${envPublic.backendUrl}/auth/forgot-password`,
+    me: `${envPublic.backendUrl}/auth/me`,
   },
 
   users: {
-    create: `${envPrivate.backendUrl}/users`,
-    getAll: `${envPrivate.backendUrl}/users`,
-    getOne: `${envPrivate.backendUrl}/users/:id`,
-    update: `${envPrivate.backendUrl}/users/:id`,
-    delete: `${envPrivate.backendUrl}/users/:id`,
-    inactive: `${envPrivate.backendUrl}/users/inactive/:days`,
+    create: `${envPublic.backendUrl}/users`,
+    getAll: `${envPublic.backendUrl}/users`,
+    getOne: `${envPublic.backendUrl}/users/:id`,
+    update: `${envPublic.backendUrl}/users/:id`,
+    delete: `${envPublic.backendUrl}/users/:id`,
+    inactive: `${envPublic.backendUrl}/users/inactive/:days`,
   },
 };
