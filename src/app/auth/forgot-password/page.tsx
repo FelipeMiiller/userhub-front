@@ -1,16 +1,16 @@
-import { GalleryVerticalEnd } from 'lucide-react';
-import { ReactLogo } from 'src/components/react-logo';
-import { SignUpForm } from './components/signup-form';
-import { hrefs } from '@/config/hrefs';
-import { companyName } from '@/config/metadata';
 import { Metadata } from 'next';
+import { ForgotPasswordForm } from './components/forgot-password.form';
+import { GalleryVerticalEnd } from 'lucide-react';
+import { companyName } from '@/config/metadata';
+import { hrefs } from '@/config/hrefs';
+import { ReactLogo } from '@/components/react-logo';
 
 export const metadata: Metadata = {
-  title: 'Cadastrar',
-  description: 'Faça cadastro para continuar',
+  title: 'Recuperar senha',
+  description: 'Recupere o acesso à sua conta',
 };
 
-export default async function SignUpPage() {
+export default function ForgotPasswordPage() {
   return (
     <div data-testid="home-page" className="grid min-h-svh lg:grid-cols-2">
       <div className="flex flex-col gap-4 p-6 md:p-10">
@@ -24,20 +24,21 @@ export default async function SignUpPage() {
         </div>
         <div className="flex flex-1 justify-center items-center">
           <div className="w-full max-w-xs">
-            <SignUpForm />
+            <ForgotPasswordForm />
           </div>
         </div>
       </div>
       <div className="hidden relative justify-center items-center bg-muted lg:flex">
         <div className="flex flex-col gap-4 items-center">
           <span data-testid="react-logo" className="mb-2">
+            {/* Ícone React animado */}
             <ReactLogo size={128} />
           </span>
           <h1 data-testid="title" className="text-2xl font-bold">
-            Cadastre-se
+            Recuperar senha
           </h1>
           <span data-testid="subtitle" className="text-sm text-muted-foreground">
-            Faça seu cadastro para continuar
+            Digite seu e-mail para receber um link de recuperação de senha
           </span>
         </div>
       </div>

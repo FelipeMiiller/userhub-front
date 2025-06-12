@@ -1,9 +1,8 @@
 <div align="center">
   <img src="https://upload.wikimedia.org/wikipedia/commons/a/a7/React-icon.svg" width="120" alt="React Logo" />
+  <h1>UserHub</h1>
+  <p>Sistema de autenticação e gerenciamento de usuários</p>
 </div>
-
-# Frontend - UserHub
-Sistema de autenticação e gerenciamento de usuários
 
 ---
 
@@ -11,93 +10,134 @@ Sistema de autenticação e gerenciamento de usuários
 
 ### 1. Tela de Login
 - Campos: email e senha
-- Após login:
-  - **Admin:** Redireciona para listagem de usuários
-  - **User:** Redireciona para tela de perfil
+- Integração com Google OAuth
+- Validação de campos em tempo real
+- Feedback visual para erros
+- Redirecionamento pós-login:
+  - **Admin:** Dashboard administrativo
+  - **User:** Perfil do usuário
 
-### 2. Tela de Cadastro
+### 2. Recuperação de Senha
+- Fluxo completo de recuperação
+- Feedback visual do status
+- Redirecionamento automático após redefinição
+- Interface responsiva e acessível
+
+### 3. Tela de Cadastro
 - Campos: nome, email, senha
-- Redireciona para tela de login após cadastro
+- Validação em tempo real
+- Força da senha
+- Termos de uso
+- Redirecionamento automático para login
+- Tratamento de erros
 
-### 3. Tela de Listagem (Admins)
-- Mostra: nome, email, papel, status (ativo/inativo)
-- Filtros por papel (`admin`/`user`), ordenação por nome/data
-- Botões para editar ou excluir (opcional)
+### 4. Tela de Listagem (Admins)
+- Lista completa de usuários
+- Colunas: nome, email, papel, status, últ. acesso
+- Filtros avançados:
+  - Por papel (admin/user)
+  - Por status (ativo/inativo)
+  - Busca por nome/email
+- Ordenação por qualquer coluna
+- Paginação com seleção de itens por página
+- Ações rápidas (editar, desativar, redefinir senha)
 
-### 4. Tela de Perfil (Usuário)
-- Mostra: nome, email, data de criação
-- Permite editar nome e senha
+### 5. Tela de Perfil (Usuário)
+- Informações do usuário:
+  - Nome e email
+  - Foto de perfil
+  - Data de cadastro
+  - Último acesso
+- Edição de perfil
+- Alteração de senha segura
+- Preferências de notificação
+- Sessões ativas
+- Exportação de dados
 
 ---
 
 ## Requisitos Técnicos
-- **Framework:** ReactJS + TypeScript
-- **Rotas:** React Router
-- **Estado Global:** Context API ou Redux
-- **HTTP Client:** Axios ou Fetch API
-- **Estilo:** TailwindCSS, Styled Components ou CSS Modules
-- **Login Social :** via backend Google
 
-## Responsividade
-- Compatível com dispositivos móveis e desktops
+### Dependências Principais
+- **Framework:** Nextjs + TypeScript
+- **Gerenciamento de Estado:** 
+  - Context API para autenticação
+  - React Query para dados remotos
+  - Zustand para estado manipulaveis
+- **UI/UX:**
+  - TailwindCSS para estilização
+  - Shadcn/ui para componentes
+  - Framer Motion para animações
+  - React Hook Form para formulários
+  - Zod para validação
+- **Autenticação:** JWT + OAuth2
+- **Testes:** Jest + React Testing Library
+- **Formatação:** ESLint + Prettier
 
+## Design Responsivo
+- Mobile-first
+- Breakpoints otimizados
+- Navegação adaptativa
+- Tabelas responsivas
+- Imagens responsivas
+- Suporte a dark/light mode
+
+## Segurança
+- Tokens JWT armazenados em httpOnly cookies
+- Validação de formulários no cliente e servidor
+- Rate limiting nas requisições de autenticação
+- CORS configurado corretamente
+- Headers de segurança habilitados
 ---
 
-## Observações
-- O backend deve estar rodando e configurado para autenticação.
-- Variáveis de ambiente para integração com Slack, Google OAuth, etc., devem estar presentes no `.env.local`.
-- Para personalizar estilos, edite os arquivos em `src/styles`.
+## Pré-requisitos
+- Node.js 18+
+- npm ou yarn
+- Backend rodando localmente
+- Conta no Google Cloud para OAuth
 
+## Como Executar
 
-## 🚀 Tecnologias Principais
+1. Instale as dependências:
+```bash
+yarn
+# ou
+npm install
+```
 
-- **Next.js 15.3.2** - Framework React com foco em performance e SEO
-- **React 19** - Biblioteca JavaScript para UI
-- **React Query 5** - Gerenciamento de estado assincronos, com persistência via IndexedDB
-- **VLibras** - Plugin de acessibilidade para libras
-- **Tailwind CSS** - Framework de estilização
-- **Axios** - Cliente HTTP
-- **Zustand** - Gerenciamento de estados manipulaveis
-- **Jest e React Testing Library** - Frameworks de testes
-- **TypeScript** - Tipagem estática
-- **ESLint** - Linter para código JavaScript/TypeScript
+2. Configure as variáveis de ambiente no `.env.local`
 
-## ✨ Funcionalidades
+3. Inicie o servidor de desenvolvimento:
+```bash
+yarn dev
+# ou
+npm run dev
+```
 
-### 🔐 Autenticação
-- Sistema de autenticação completo 
-- Páginas de login e cadastro responsivas
-- Suporte a autenticação via Google
-- Proteção de rotas autenticadas
-- Gerenciamento de sessão seguro
-- Validação de formulários em tempo real
-- Feedback visual para erros de validação
-- Estados de carregamento durante as requisições
-- Tratamento de erros detalhado
-- Redirecionamento inteligente pós-autenticação
-
+4. Acesse `http://localhost:3000`
 
 ## 📁 Estrutura de Pastas
 
 ```
 src/
-├── app/                      # Páginas e rotas do Next.js
-│   └── [lang]/               # Rotas com suporte a múltiplos idiomas
-│       ├── auth/             # Páginas de autenticação
-│       │   ├── sign-in/      # Página de login
-│       │   └── sign-up/      # Página de cadastro
-│       └── ...
-├── components/               # Componentes reutilizáveis
+├── app/                    # Páginas e rotas do Next.js
+│    │
+│    ├─ auth/               # Páginas de autenticação
+│    │  ├─ sign-in/         # Página de login
+│    │  ├─ sign-up/         # Página de cadastro
+│    │  └─ forgot-password/ # Página de recuperação de senha
+│    └── ...
+├── components/             # Componentes reutilizáveis
 │ 
-├── config/                  # Configurações do projeto
+├── config/                 # Configurações do projeto
 │   ├── env.ts              # Variáveis de ambiente
 │   ├── slack.ts            # Integração com o Slack
 │   ├── hrefs.ts            # URLs do projeto
 │   └── routes.ts           # Configurações de rotas
-├── lib/                     # Bibliotecas e utilitários
+├── lib/                    # Bibliotecas e utilitários
 │   ├── constants/          # Constantes do projeto
 │   └── utils/              # Funções utilitárias
-├── services/                # Serviços e integrações
+├── services/               # Serviços e integrações
 │   ├── fetch/              # Serviços de requisição HTTP
 │   └── reactQuery/         # Configuração do React Query
 ├── server/                 # Servidor e integrações
@@ -107,29 +147,6 @@ src/
 └── types/                  # Tipos TypeScript
 ```
 
-## 🚀 Começando
-
-### Pré-requisitos
-
-- Node.js 18+ e Yarn
-
-### Instalação
-
-1. Clone o repositório:
-   ```bash
-   git clone https://github.com/felipemiiller/nextjs-template.git
-   cd nextjs-template
-   ```
-
-2. Instale as dependências:
-   ```bash
-   yarn install
-   ```
-
-3. Configure as variáveis de ambiente:
-   ```bash
-   cp .env.example .env.local
-   ```
 
 
 ## 🛠️ Scripts Disponíveis
@@ -158,10 +175,11 @@ yarn test
 
 # Executar testes em modo watch
 yarn test:watch
-
 ```
 
-## 🚨 Notificações de Erro no Slack
+## 📝 Licença
+
+[MIT](LICENSE)
 
 Este projeto envia automaticamente mensagens de erro e warning para um canal do Slack, facilitando o monitoramento de problemas em produção.
 
@@ -187,12 +205,6 @@ SLACK_ICON_EMOJI=:emoji: (opcional)
 - [Documentação do Next.js](https://nextjs.org/docs)
 - [Documentação do React Query](https://tanstack.com/query/latest/docs)
 - [Documentação do VLibras](https://vlibras.gov.br/)
-
-## 🌍 Idiomas Suportados
-
-- Português (Brasil)
-
-
 
 ## 📝 Licença
 

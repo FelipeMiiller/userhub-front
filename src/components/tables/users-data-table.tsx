@@ -165,8 +165,8 @@ const columns: ColumnDef<UserTable>[] = [
     },
   },
   {
-    accessorKey: "Status",
-    header: "Status",
+    accessorKey: 'Status',
+    header: 'Status',
     cell: ({ row }) => (
       <Badge variant="outline" className="text-muted-foreground px-1.5">
         {row.original.Status === true ? (
@@ -174,7 +174,7 @@ const columns: ColumnDef<UserTable>[] = [
         ) : (
           <IconLoader />
         )}
-        {row.original.Status === true ? "Ativo" : "Inativo"}
+        {row.original.Status === true ? 'Ativo' : 'Inativo'}
       </Badge>
     ),
   },
@@ -223,37 +223,34 @@ const columns: ColumnDef<UserTable>[] = [
     },
   },
   {
-    id: "actions",
+    id: 'actions',
     cell: ({ row }) => {
-
- 
-
-
       return (
-      <DropdownMenu>
-        <EditUserFormDialog
-          user={row.original}
-          trigger={
-            <div></div>
-          }
-        />
-        <DropdownMenuTrigger asChild>
-          <Button
-            variant="ghost"
-            className="data-[state=open]:bg-muted text-muted-foreground flex size-8"
-            size="icon"
-          >
-            <IconDotsVertical />
-            <span className="sr-only">Open menu</span>
-          </Button>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent align="end" className="w-32">
-          <DropdownMenuItem onClick={() => window.document.getElementById(`edit-user-dialog-${row.original.Id}`)?.click()}>Editar  </DropdownMenuItem>
-          <DropdownMenuSeparator />
-          <DropdownMenuItem variant="destructive">Excluir</DropdownMenuItem>
-        </DropdownMenuContent>
-      </DropdownMenu>
-    )
+        <DropdownMenu>
+          <EditUserFormDialog user={row.original} trigger={<div></div>} />
+          <DropdownMenuTrigger asChild>
+            <Button
+              variant="ghost"
+              className="data-[state=open]:bg-muted text-muted-foreground flex size-8"
+              size="icon"
+            >
+              <IconDotsVertical />
+              <span className="sr-only">Open menu</span>
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end" className="w-32">
+            <DropdownMenuItem
+              onClick={() =>
+                window.document.getElementById(`edit-user-dialog-${row.original.Id}`)?.click()
+              }
+            >
+              Editar{' '}
+            </DropdownMenuItem>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem variant="destructive">Excluir</DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      );
     },
   },
 ];
@@ -398,10 +395,7 @@ export function UsersDataTable({ data: initialData }: { data: User[] }) {
           </DropdownMenu>
         </div>
       </div>
-      <TabsContent
-        value="outline"
-        className="relative flex flex-col gap-4 overflow-auto px-2 "
-      >
+      <TabsContent value="outline" className="relative flex flex-col gap-4 overflow-auto px-2 ">
         <div className="overflow-hidden rounded-lg border">
           <DndContext
             collisionDetection={closestCenter}

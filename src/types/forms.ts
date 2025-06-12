@@ -26,3 +26,12 @@ export type SignInFormValues = {
   email: string;
   password: string;
 };
+export type ForgotPasswordState =
+  | {
+      error?: {
+        email?: string[] | undefined;
+      };
+      message?: string | null;
+      status?: number;
+    }
+  | undefined;

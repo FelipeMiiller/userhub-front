@@ -3,14 +3,11 @@ import { cn } from 'src/lib/utils';
 import { Input } from 'src/components/ui/input';
 import { Label } from 'src/components/ui/label';
 import { Button } from 'src/components/ui/button';
-
 import { Icons } from 'src/components/icons';
-
-import { useActionState } from 'react';
+import { useActionState, useEffect } from 'react';
 import { signIn } from 'src/server/actions/auth.actions';
 import { toast } from 'sonner';
 import { routesBackend } from 'src/config/routes';
-import { useEffect } from 'react';
 import { Loader2 } from 'lucide-react';
 import { hrefs } from 'src/config/hrefs';
 import { redirect } from 'next/navigation';
@@ -83,7 +80,7 @@ export function SignInForm({ className, ...props }: React.ComponentPropsWithoutR
           <div className="flex items-center">
             <Label htmlFor="password">Senha</Label>
             <a
-              href="#"
+              href={hrefs.auth.forgotPassword}
               className="ml-auto text-sm underline-offset-4 hover:underline text-muted-foreground"
               aria-disabled={isPending}
             >

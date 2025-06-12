@@ -24,12 +24,9 @@ import { EditUserSchema, EditUserFormValues } from '@/lib/validators/users.valid
 type EditUserFormDialogProps = {
   user: User;
   trigger?: React.ReactNode;
-
- 
 };
 
-export function EditUserFormDialog({ user, trigger}: EditUserFormDialogProps) {
-
+export function EditUserFormDialog({ user, trigger }: EditUserFormDialogProps) {
   const { updateUser } = useUsers();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const {
@@ -48,9 +45,6 @@ export function EditUserFormDialog({ user, trigger}: EditUserFormDialogProps) {
     },
   });
 
-
-
-
   const onSubmit = async (data: EditUserFormValues) => {
     setIsSubmitting(true);
     try {
@@ -60,7 +54,7 @@ export function EditUserFormDialog({ user, trigger}: EditUserFormDialogProps) {
 
       await updateUser.mutateAsync({ id: user.Id, data: userData });
       reset();
-     window.document.getElementById('edit-user-dialog')?.click();
+      window.document.getElementById('edit-user-dialog')?.click();
     } finally {
       setIsSubmitting(false);
     }
@@ -68,7 +62,9 @@ export function EditUserFormDialog({ user, trigger}: EditUserFormDialogProps) {
 
   return (
     <Dialog>
-      <DialogTrigger id={`edit-user-dialog-${user.Id}`} asChild>{trigger || <Button variant="outline">Editar</Button>}</DialogTrigger>
+      <DialogTrigger id={`edit-user-dialog-${user.Id}`} asChild>
+        {trigger || <Button variant="outline">Editar</Button>}
+      </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
           <DialogTitle>Editar Usuário</DialogTitle>

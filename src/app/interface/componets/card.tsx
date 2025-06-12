@@ -35,33 +35,32 @@ export function UserProfileCard({ className, ...props }: React.ComponentPropsWit
         </CardDescription>
       </CardHeader>
       <CardContent className="grid gap-2">
-      {(() => {
-    switch (session?.Role) {
-      case 'ADMIN':
-        return (
-          <div className="flex justify-center mt-2">
-            <Link href={hrefs.interface.admin} className="w-full">
-              <Button variant="outline" className="w-full">
-                {'Ver Painel'}
-              </Button>
-            </Link>
-          </div>
-        );
-      case 'USER':
-        return (
-          <div className="flex justify-center mt-2">
-            <Link href={hrefs.interface.profile} className="w-full">
-              <Button variant="outline" className="w-full">
-                {'Perfil'}
-              </Button>
-            </Link>
-          </div>
-        );
-      default:
-        return null;
-    }
-  })()}
-
+        {(() => {
+          switch (session?.Role) {
+            case 'ADMIN':
+              return (
+                <div className="flex justify-center mt-2">
+                  <Link href={hrefs.interface.admin} className="w-full">
+                    <Button variant="outline" className="w-full">
+                      {'Ver Painel'}
+                    </Button>
+                  </Link>
+                </div>
+              );
+            case 'USER':
+              return (
+                <div className="flex justify-center mt-2">
+                  <Link href={hrefs.interface.profile} className="w-full">
+                    <Button variant="outline" className="w-full">
+                      {'Perfil'}
+                    </Button>
+                  </Link>
+                </div>
+              );
+            default:
+              return null;
+          }
+        })()}
 
         <form className="flex justify-center" action={hrefs.auth.signOut} method="POST">
           <Button
