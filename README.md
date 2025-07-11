@@ -3,9 +3,7 @@
   <h1>UserHub</h1>
   <p>Sistema de autenticação e gerenciamento de usuários</p>
 </div>
-
 ---
-
 ## Funcionalidades
 
 ### 1. Tela de Login
@@ -31,7 +29,7 @@
 - Redirecionamento automático para login
 - Tratamento de erros
 
-### 4. Tela de Listagem (Admins)
+### 4. Tela de Listagem (Admin)
 - Lista completa de usuários
 - Colunas: nome, email, papel, status, últ. acesso
 - Filtros avançados:
@@ -177,14 +175,8 @@ yarn test
 yarn test:watch
 ```
 
-## 📝 Licença
-
-[MIT](LICENSE)
-
 Este projeto envia automaticamente mensagens de erro e warning para um canal do Slack, facilitando o monitoramento de problemas em produção.
-
 ### Como configurar
-
 1. Gere um Webhook do Slack e copie a URL.
 2. Adicione as seguintes variáveis ao seu arquivo `.env.local`:
 ```env

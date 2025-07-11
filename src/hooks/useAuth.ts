@@ -1,15 +1,15 @@
 'use client';
+import { hrefs } from '@/config/hrefs';
 import { QueryKeys } from '@/lib/constants/query-keys';
-import { GetMe, PutUser } from '@/services/fetch';
+import { GetMe, PutUser, SignOut } from '@/services/fetch';
 import { UpdateUser } from '@/types';
-
 import { useMutation, useQuery } from '@tanstack/react-query';
+import { redirect } from 'next/navigation';
 import { invalidateQueries } from 'src/services/reactQuery/get-query-client';
 export function useAuth() {
   const {
     data: user,
     isLoading,
-
     error,
     refetch,
   } = useQuery({
@@ -25,8 +25,17 @@ export function useAuth() {
     },
   });
 
+  const signOut = useMutation({
+    mutationFn: async () => await SignOut(),
+    onSuccess: () => {
+      invalidateQueries();
+      redirect(hrefs.home);
+    },
+  }).mutate;
+
   return {
     isLoading,
+    signOut,
     session: user,
     refetch,
     error,

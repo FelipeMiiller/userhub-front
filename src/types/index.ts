@@ -17,3 +17,10 @@ export type CreateUser = Omit<User, 'Id' | 'CreatedAt' | 'UpdatedAt' | 'LastLogi
 export type UpdateUser = Partial<Pick<User, 'Name' | 'LastName' | 'AvatarUrl'>> & {
   Password?: string;
 };
+
+export type Profile = Omit<User, 'CreatedAt' | 'UpdatedAt' | 'LastLoginAt'>;
+
+export type ChangePassword = {
+  password: string;
+  newPassword: string;
+};

@@ -59,8 +59,6 @@ export function NewUserFormDialog() {
         Role: data.Role === 'ADMIN' ? Roles.ADMIN : Roles.USER,
       } as CreateUser & { Password: string };
 
-      console.log('Enviando dados do usuário:', userData);
-
       await createUser.mutateAsync(userData);
 
       reset();

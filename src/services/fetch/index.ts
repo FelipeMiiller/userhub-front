@@ -5,7 +5,7 @@ import { hrefs } from 'src/config/hrefs';
 import { CACHE_TAGS } from './cache-keys';
 import { Cookie_Keys } from '@/lib/constants/cookies-keys';
 import Cookies from 'js-cookie';
-import { CreateUser, UpdateUser, User } from '@/types';
+import { ChangePassword as ChangePasswordType, CreateUser, UpdateUser, User } from '@/types';
 import { envPublic } from '@/config/env.public';
 
 export async function fetchClient<T>(args: { input: URL | RequestInfo; init?: RequestInit }) {
@@ -99,6 +99,17 @@ export async function fetchClient<T>(args: { input: URL | RequestInfo; init?: Re
     throw error;
   }
 }
+
+export const SignOut = async () => {
+  await fetchClient({
+    input: hrefs.auth.signOut,
+    init: {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+    },
+  });
+  return true;
+};
 
 export const GetMe = async () =>
   await fetchClient<User>({

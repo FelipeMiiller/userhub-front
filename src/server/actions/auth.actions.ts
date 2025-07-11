@@ -1,12 +1,18 @@
 'use server';
 import { redirect } from 'next/navigation';
 import { createSession } from './session.actions';
-import { ForgotPasswordState, SignInFormState, SignUpFormState } from 'src/types/forms';
+import {
+  ChangePasswordState,
+  ForgotPasswordState,
+  SignInFormState,
+  SignUpFormState,
+} from 'src/types/forms';
 import { routesBackend } from 'src/config/routes';
 import { hrefs } from 'src/config/hrefs';
 import {
   SignInFormSchema,
   SignUpFormSchema,
+  changePasswordSchema,
   forgotPasswordSchema,
 } from 'src/lib/validators/auth.validators';
 import HTTP_STATUS from 'src/lib/constants/http-status-codes';
@@ -90,7 +96,7 @@ export async function forgotPassword(
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ email }),
+      body: JSON.stringify({ Email: email }),
     });
 
     const data = await response.json();
@@ -109,6 +115,59 @@ export async function forgotPassword(
     };
   } catch (error) {
     logError('Forgot password error:', error);
+    return {
+      status: HTTP_STATUS.INTERNAL_SERVER_ERROR.code,
+      message: 'Não foi possível processar sua solicitação. Tente novamente mais tarde.',
+    };
+  }
+}
+
+export async function ChangePassword(
+  _state: ChangePasswordState,
+  formData: FormData,
+): Promise<ChangePasswordState> {
+  const validatedFields = changePasswordSchema.safeParse({
+    email: formData.get('email'),
+    password: formData.get('password'),
+    newPassword: formData.get('newPassword'),
+  });
+
+  if (!validatedFields.success) {
+    return {
+      status: HTTP_STATUS.BAD_REQUEST.code,
+      error: validatedFields.error.flatten().fieldErrors,
+    };
+  }
+
+  try {
+    const response = await fetch(routesBackend.auth.changePassword, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        Email: validatedFields.data.email,
+        Password: validatedFields.data.password,
+        NewPassword: validatedFields.data.newPassword,
+      }),
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      logWarn('Change password error:', data);
+      return {
+        status: response.status,
+        message: data.message || 'Ocorreu um erro ao processar sua solicitação',
+      };
+    }
+
+    return {
+      status: response.status,
+      message: data.message,
+    };
+  } catch (error) {
+    logError('Change password error:', error);
     return {
       status: HTTP_STATUS.INTERNAL_SERVER_ERROR.code,
       message: 'Não foi possível processar sua solicitação. Tente novamente mais tarde.',

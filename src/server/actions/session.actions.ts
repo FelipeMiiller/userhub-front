@@ -15,7 +15,7 @@ export async function deleteSession() {
   try {
     const cookiesStore = await cookies();
     const accessToken = cookiesStore.get(Cookie_Keys.token)?.value;
-    console.log('accessToken', accessToken);
+
     await fetch(routesBackend.auth.signout, {
       method: 'POST',
       headers: {
