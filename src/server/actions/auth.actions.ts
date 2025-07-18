@@ -1,15 +1,26 @@
 'use server';
 import { redirect } from 'next/navigation';
 import { createSession } from './session.actions';
-import { SignInFormState, SignUpFormState } from 'src/types/forms';
+import {
+  ChangePasswordState,
+  ForgotPasswordState,
+  SignInFormState,
+  SignUpFormState,
+} from 'src/types/forms';
 import { routesBackend } from 'src/config/routes';
 import { hrefs } from 'src/config/hrefs';
-import { SignInFormSchema, SignUpFormSchema } from 'src/lib/validators/auth.validators';
+import {
+  SignInFormSchema,
+  SignUpFormSchema,
+  changePasswordSchema,
+  forgotPasswordSchema,
+} from 'src/lib/validators/auth.validators';
 import HTTP_STATUS from 'src/lib/constants/http-status-codes';
 
 import { logError, logInfo, logWarn } from '../logger';
 
 const { signin, signup } = routesBackend.auth;
+
 export async function signUp(
   _state: SignUpFormState,
   formData: FormData,
@@ -42,7 +53,7 @@ export async function signUp(
 
   if (!response.ok) {
     const data = await response.json();
-    console.log('data', data);
+
     return {
       status: response.status,
       message: data.message,
@@ -60,6 +71,108 @@ export async function signUp(
     status: response.status,
     message: response.statusText,
   };
+}
+
+export async function forgotPassword(
+  _state: ForgotPasswordState,
+  formData: FormData,
+): Promise<ForgotPasswordState> {
+  const validatedFields = forgotPasswordSchema.safeParse({
+    email: formData.get('email'),
+  });
+
+  if (!validatedFields.success) {
+    return {
+      status: HTTP_STATUS.BAD_REQUEST.code,
+      error: validatedFields.error.flatten().fieldErrors,
+    };
+  }
+
+  const email = validatedFields.data.email;
+
+  try {
+    const response = await fetch(routesBackend.auth.forgotPassword, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ Email: email }),
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      logWarn('Forgot password error:', data);
+      return {
+        status: response.status,
+        message: data.message || 'Ocorreu um erro ao processar sua solicitação',
+      };
+    }
+
+    return {
+      status: response.status,
+      message: data.message,
+    };
+  } catch (error) {
+    logError('Forgot password error:', error);
+    return {
+      status: HTTP_STATUS.INTERNAL_SERVER_ERROR.code,
+      message: 'Não foi possível processar sua solicitação. Tente novamente mais tarde.',
+    };
+  }
+}
+
+export async function ChangePassword(
+  _state: ChangePasswordState,
+  formData: FormData,
+): Promise<ChangePasswordState> {
+  const validatedFields = changePasswordSchema.safeParse({
+    email: formData.get('email'),
+    password: formData.get('password'),
+    newPassword: formData.get('newPassword'),
+  });
+
+  if (!validatedFields.success) {
+    return {
+      status: HTTP_STATUS.BAD_REQUEST.code,
+      error: validatedFields.error.flatten().fieldErrors,
+    };
+  }
+
+  try {
+    const response = await fetch(routesBackend.auth.changePassword, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        Email: validatedFields.data.email,
+        Password: validatedFields.data.password,
+        NewPassword: validatedFields.data.newPassword,
+      }),
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      logWarn('Change password error:', data);
+      return {
+        status: response.status,
+        message: data.message || 'Ocorreu um erro ao processar sua solicitação',
+      };
+    }
+
+    return {
+      status: response.status,
+      message: data.message,
+    };
+  } catch (error) {
+    logError('Change password error:', error);
+    return {
+      status: HTTP_STATUS.INTERNAL_SERVER_ERROR.code,
+      message: 'Não foi possível processar sua solicitação. Tente novamente mais tarde.',
+    };
+  }
 }
 
 export async function signIn(

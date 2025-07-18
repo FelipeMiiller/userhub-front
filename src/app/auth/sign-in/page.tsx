@@ -1,9 +1,14 @@
 import { GalleryVerticalEnd } from 'lucide-react';
 import { ReactLogo } from '@/components/react-logo';
-
 import { SignInForm } from './components/signin.form';
 import { hrefs } from '@/config/hrefs';
 import { companyName } from '@/config/metadata';
+import { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'Entrar',
+  description: 'Faça seu login para continuar',
+};
 
 export default function SignInPage() {
   return (
@@ -33,7 +38,7 @@ export default function SignInPage() {
             Entrar
           </h1>
           <span data-testid="subtitle" className="text-sm text-muted-foreground">
-            Faça login para continuar
+            Faça seu login para continuar
           </span>
         </div>
       </div>

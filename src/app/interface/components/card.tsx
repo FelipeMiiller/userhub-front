@@ -1,17 +1,14 @@
 'use client';
-
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from 'src/components/ui/card';
 import { ReactLogo } from 'src/components/react-logo';
-
 import { Button } from '@/components/ui/button';
 import { hrefs } from '@/config/hrefs';
-
 import Link from 'next/link';
 import { cn } from '@/lib/utils';
 import { useAuth } from '@/hooks/useAuth';
 
 export function UserProfileCard({ className, ...props }: React.ComponentPropsWithoutRef<'div'>) {
-  const { session, invalidateAll } = useAuth();
+  const { session, signOut } = useAuth();
 
   return (
     <Card className={cn('w-full max-w-md', className)} {...props}>
@@ -35,10 +32,7 @@ export function UserProfileCard({ className, ...props }: React.ComponentPropsWit
         </CardDescription>
       </CardHeader>
       <CardContent className="grid gap-2">
-      {(() => {
-    switch (session?.Role) {
-      case 'ADMIN':
-        return (
+        {session?.Role === 'ADMIN' ? (
           <div className="flex justify-center mt-2">
             <Link href={hrefs.interface.admin} className="w-full">
               <Button variant="outline" className="w-full">
@@ -46,9 +40,7 @@ export function UserProfileCard({ className, ...props }: React.ComponentPropsWit
               </Button>
             </Link>
           </div>
-        );
-      case 'USER':
-        return (
+        ) : (
           <div className="flex justify-center mt-2">
             <Link href={hrefs.interface.profile} className="w-full">
               <Button variant="outline" className="w-full">
@@ -56,23 +48,18 @@ export function UserProfileCard({ className, ...props }: React.ComponentPropsWit
               </Button>
             </Link>
           </div>
-        );
-      default:
-        return null;
-    }
-  })()}
+        )}
 
-
-        <form className="flex justify-center" action={hrefs.auth.signOut} method="POST">
+        <div className="flex justify-center">
           <Button
             type="submit"
             variant="destructive"
-            onClick={() => invalidateAll()}
+            onClick={() => signOut()}
             className="mt-2 w-full"
           >
             {'Sair'}
           </Button>
-        </form>
+        </div>
       </CardContent>
     </Card>
   );

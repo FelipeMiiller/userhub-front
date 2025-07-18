@@ -28,13 +28,10 @@ export async function middleware(request: NextRequest) {
 
     if (isUserRoute) {
       try {
-        // Decodificar o token para verificar o papel do usuário
         const payload = decodeJwt(session.accessToken);
         const userRole = payload.role as Roles;
-        console.log('userRole', userRole);
+
         if (userRole !== Roles.USER) {
-          // Redirecionar usuários comuns para a página de perfil
-          console.log('Acesso negado: usuário não é administrador');
           return NextResponse.redirect(new URL(hrefs.auth.signIn, request.nextUrl.origin));
         }
       } catch (error) {
@@ -46,13 +43,10 @@ export async function middleware(request: NextRequest) {
 
     if (isAdminRoute) {
       try {
-        // Decodificar o token para verificar o papel do usuário
         const payload = decodeJwt(session.accessToken);
         const userRole = payload.role as Roles;
 
         if (userRole !== Roles.ADMIN) {
-          // Redirecionar usuários comuns para a página de perfil
-          console.log('Acesso negado: usuário não é administrador');
           return NextResponse.redirect(new URL(hrefs.interface.profile, request.nextUrl.origin));
         }
       } catch (error) {

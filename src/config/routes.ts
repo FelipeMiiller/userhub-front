@@ -1,4 +1,3 @@
-
 import { envPublic } from './env.public';
 
 export const routesBackend = {
@@ -12,6 +11,7 @@ export const routesBackend = {
     signup: `${envPublic.backendUrl}/auth/signup`,
     refreshToken: `${envPublic.backendUrl}/auth/refreshToken`,
     forgotPassword: `${envPublic.backendUrl}/auth/forgot-password`,
+    changePassword: `${envPublic.backendUrl}/auth/change-password`,
     me: `${envPublic.backendUrl}/auth/me`,
   },
 

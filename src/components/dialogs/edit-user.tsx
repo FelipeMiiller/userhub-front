@@ -1,85 +1,77 @@
 'use client';
 
-import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { toast } from 'sonner';
-
+import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card';
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-
-import { User, UpdateUser } from '@/types';
-import { PutUser } from '@/services/fetch';
+import { useUsers } from '@/hooks/useUsers';
+import { UpdateUser, User } from '@/types';
 import { cleanObject } from '@/lib/utils/clean';
-import { useAuth } from '@/hooks/useAuth';
-import { ProfileFormValues, profileFormSchema } from '@/lib/validators/users.validators';
+import { EditUserSchema, EditUserFormValues } from '@/lib/validators/users.validators';
 
-interface EditProfileFormProps {
+type EditUserFormDialogProps = {
   user: User;
-  onCancel: () => void;
-  onSuccess: () => void;
-}
+  trigger?: React.ReactNode;
+};
 
-export function EditProfileForm({ user, onCancel, onSuccess }: EditProfileFormProps) {
+export function EditUser({ user, trigger }: EditUserFormDialogProps) {
+  const { updateUser } = useUsers();
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const { invalidateSession } = useAuth();
-
   const {
     register,
     handleSubmit,
     reset,
     formState: { errors },
-  } = useForm<ProfileFormValues>({
-    resolver: zodResolver(profileFormSchema),
+  } = useForm<EditUserFormValues>({
+    resolver: zodResolver(EditUserSchema),
     defaultValues: {
       Name: user.Name,
-
       LastName: user.LastName || '',
       AvatarUrl: user.AvatarUrl || '',
       Password: '',
+      Role: user.Role,
     },
   });
 
-  const onSubmit = async (data: ProfileFormValues) => {
+  const onSubmit = async (data: EditUserFormValues) => {
     setIsSubmitting(true);
     try {
-      // Preparar dados para atualização
       const userData = {
         ...cleanObject(data),
       } as UpdateUser;
 
-      // Enviar atualização para a API
-      await PutUser({ id: user.Id, user: userData });
-
-      invalidateSession();
-      toast.success('Perfil atualizado com sucesso!');
+      await updateUser.mutateAsync({ id: user.Id, data: userData });
       reset();
-    } catch (error) {
-      console.error('Erro ao atualizar perfil:', error);
-      toast.error('Erro ao atualizar perfil. Tente novamente.');
+      window.document.getElementById('edit-user-dialog')?.click();
     } finally {
       setIsSubmitting(false);
     }
   };
 
   return (
-    <Card className="w-full shadow-md">
-      <CardHeader>
-        <CardTitle className="text-2xl">Editar Perfil</CardTitle>
-        <CardDescription>Atualize suas informações pessoais</CardDescription>
-      </CardHeader>
+    <Dialog>
+      <DialogTrigger id={`edit-user-dialog-${user.Id}`} asChild>
+        {trigger || <Button variant="outline">Editar</Button>}
+      </DialogTrigger>
+      <DialogContent className="sm:max-w-[425px]">
+        <DialogHeader>
+          <DialogTitle>Editar Usuário</DialogTitle>
+          <DialogDescription>Atualize os dados do usuário {user.Name}.</DialogDescription>
+        </DialogHeader>
 
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-        <CardContent className="space-y-4">
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           <div className="grid gap-2">
             <Label htmlFor="Name">Nome</Label>
             <Input
@@ -93,6 +85,7 @@ export function EditProfileForm({ user, onCancel, onSuccess }: EditProfileFormPr
               <p className="text-sm font-medium text-destructive">{errors.Name.message}</p>
             )}
           </div>
+
           <div className="grid gap-2">
             <Label htmlFor="LastName">Sobrenome</Label>
             <Input
@@ -108,11 +101,11 @@ export function EditProfileForm({ user, onCancel, onSuccess }: EditProfileFormPr
           </div>
 
           <div className="grid gap-2">
-            <Label htmlFor="Password">Nova Senha (opcional)</Label>
+            <Label htmlFor="Password">Senha</Label>
             <Input
               id="Password"
               type="password"
-              placeholder="Deixe em branco para manter a senha atual"
+              placeholder="Mínimo 6 caracteres"
               autoComplete="new-password"
               {...register('Password')}
               className={errors.Password ? 'border-destructive focus-visible:ring-destructive' : ''}
@@ -121,6 +114,7 @@ export function EditProfileForm({ user, onCancel, onSuccess }: EditProfileFormPr
               <p className="text-sm font-medium text-destructive">{errors.Password.message}</p>
             )}
           </div>
+
           <div className="grid gap-2">
             <Label htmlFor="AvatarUrl">URL do Avatar</Label>
             <Input
@@ -135,17 +129,32 @@ export function EditProfileForm({ user, onCancel, onSuccess }: EditProfileFormPr
               <p className="text-sm font-medium text-destructive">{errors.AvatarUrl.message}</p>
             )}
           </div>
-        </CardContent>
-
-        <CardFooter className="flex justify-between">
-          <Button type="button" variant="outline" onClick={onCancel} disabled={isSubmitting}>
-            Cancelar
-          </Button>
-          <Button type="submit" disabled={isSubmitting}>
-            {isSubmitting ? 'Salvando...' : 'Salvar Alterações'}
-          </Button>
-        </CardFooter>
-      </form>
-    </Card>
+          <div className="grid gap-2">
+            <Label htmlFor="Role">Perfil</Label>
+            <select
+              id="Role"
+              className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+              {...register('Role')}
+            >
+              <option value="USER">Usuário</option>
+              <option value="ADMIN">Administrador</option>
+            </select>
+            {errors.Role && (
+              <p className="text-sm font-medium text-destructive">{errors.Role.message}</p>
+            )}
+          </div>
+          <DialogFooter>
+            <DialogClose asChild>
+              <Button type="button" variant="outline">
+                Cancelar
+              </Button>
+            </DialogClose>
+            <Button type="submit" disabled={isSubmitting}>
+              {isSubmitting ? 'Salvando...' : 'Salvar alterações'}
+            </Button>
+          </DialogFooter>
+        </form>
+      </DialogContent>
+    </Dialog>
   );
 }

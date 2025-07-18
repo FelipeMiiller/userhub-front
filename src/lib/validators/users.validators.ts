@@ -1,3 +1,4 @@
+import { Roles } from '@/types/auth';
 import { z } from 'zod';
 
 export const CreateUserSchema = z.object({
@@ -27,7 +28,11 @@ export const CreateUserSchema = z.object({
       message: 'Senha deve conter pelo menos um caractere especial.',
     })
     .trim(),
-  AvatarUrl: z.string().url({ message: 'URL inválida' }).optional(),
+  AvatarUrl: z
+    .string()
+    .trim()
+    .refine((val) => !val || /^https?:\/\/.+\..+/.test(val), { message: 'URL inválida' })
+    .optional(),
   Role: z.enum(['ADMIN', 'USER'], {
     required_error: 'Por favor selecione um perfil',
   }),
@@ -50,7 +55,11 @@ export const EditUserSchema = z.object({
     .max(50, { message: 'Sobrenome deve ter no máximo 50 caracteres' })
     .trim()
     .optional(),
-  AvatarUrl: z.string().url({ message: 'URL inválida' }).optional(),
+  AvatarUrl: z
+    .string()
+    .trim()
+    .refine((val) => !val || /^https?:\/\/.+\..+/.test(val), { message: 'URL inválida' })
+    .optional(),
   Password: z
     .string()
     .trim()
@@ -104,38 +113,11 @@ export const profileFormSchema = z.object({
     .max(50, { message: 'Sobrenome deve ter no máximo 50 caracteres' })
     .trim()
     .optional(),
-  AvatarUrl: z.string().url({ message: 'URL inválida' }).optional(),
-  Password: z
+  AvatarUrl: z
     .string()
     .trim()
-    .refine(
-      (value) => {
-        // Se a string estiver vazia, ignora as validações
-        return value === '' || value.length >= 8;
-      },
-      { message: 'Senha deve ter pelo menos 8 caracteres' },
-    )
-    .refine(
-      (value) => {
-        // Se a string estiver vazia, ignora as validações
-        return value === '' || /[a-zA-Z]/.test(value);
-      },
-      { message: 'Senha deve conter pelo menos uma letra.' },
-    )
-    .refine(
-      (value) => {
-        // Se a string estiver vazia, ignora as validações
-        return value === '' || /[0-9]/.test(value);
-      },
-      { message: 'Senha deve conter pelo menos um número.' },
-    )
-    .refine(
-      (value) => {
-        // Se a string estiver vazia, ignora as validações
-        return value === '' || /[^a-zA-Z0-9]/.test(value);
-      },
-      { message: 'Senha deve conter pelo menos um caractere especial.' },
-    ),
+    .refine((val) => !val || /^https?:\/\/.+\..+/.test(val), { message: 'URL inválida' })
+    .optional(),
 });
 
 export type ProfileFormValues = z.infer<typeof profileFormSchema>;

@@ -1,6 +1,7 @@
 import { Geist, Geist_Mono } from 'next/font/google';
 import './globals.css';
 import Providers from 'src/components/providers';
+import { GlobalDialog } from '@/components/dialogs/global-dialog';
 
 import { Metadata } from 'next';
 
@@ -25,6 +26,7 @@ export default function RootLayout(props: { children: React.ReactNode }) {
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
         <Providers attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
           {children}
+          <GlobalDialog />
         </Providers>
       </body>
     </html>

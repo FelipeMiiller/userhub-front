@@ -5,7 +5,7 @@ import { hrefs } from 'src/config/hrefs';
 import { CACHE_TAGS } from './cache-keys';
 import { Cookie_Keys } from '@/lib/constants/cookies-keys';
 import Cookies from 'js-cookie';
-import { CreateUser, UpdateUser, User } from '@/types';
+import { ChangePassword as ChangePasswordType, CreateUser, UpdateUser, User } from '@/types';
 import { envPublic } from '@/config/env.public';
 
 export async function fetchClient<T>(args: { input: URL | RequestInfo; init?: RequestInit }) {
@@ -30,7 +30,7 @@ export async function fetchClient<T>(args: { input: URL | RequestInfo; init?: Re
 
       switch (status) {
         case 400:
-          toast('Requisição Inválida', {
+          toast.error('Requisição Inválida', {
             description: 'Os dados enviados são inválidos. Verifique e tente novamente.',
           });
           console.error(`Erro 400: Requisição inválida`);
@@ -40,46 +40,46 @@ export async function fetchClient<T>(args: { input: URL | RequestInfo; init?: Re
           console.error(`Não autenticado: ${status}`);
           break;
         case 403:
-          toast('Acesso Negado', {
+          toast.error('Acesso Negado', {
             description: 'Você não tem permissão para acessar este recurso.',
           });
           console.error(`Acesso negado: ${status}`);
           break;
         case 404:
-          toast('Não Encontrado', {
+          toast.error('Não Encontrado', {
             description: 'O recurso solicitado não foi encontrado.',
           });
           console.error(`Recurso não encontrado: ${status}`);
           break;
 
         case 409:
-          toast('Conflito', {
+          toast.error('Conflito', {
             description: 'Já existe um recurso com os mesmos dados. Verifique e tente novamente.',
           });
           console.error(`Conflito de dados: ${status}`);
           break;
         case 422:
-          toast('Erro de Validação', {
+          toast.error('Erro de Validação', {
             description: 'Os dados enviados são inválidos. Verifique e tente novamente.',
           });
           console.error(`Erro de validação: ${status}`);
           break;
 
         case 429:
-          toast('Muitas Tentativas', {
+          toast.error('Muitas Tentativas', {
             description: 'Você excedeu o limite de tentativas. Tente novamente mais tarde.',
           });
           console.error(`Muitas tentativas: ${status}`);
           break;
 
         case 500:
-          toast('Erro do Servidor', {
+          toast.error('Erro do Servidor', {
             description: 'Ocorreu um erro no servidor. Tente novamente mais tarde.',
           });
           console.error(`Erro interno do servidor: ${status}`);
           break;
         default:
-          toast('Erro na Requisição', {
+          toast.error('Erro na Requisição', {
             description: `Ocorreu um erro (${status}). Tente novamente mais tarde.`,
           });
           console.error(`Erro na requisição HTTP: ${status}`);
@@ -99,6 +99,17 @@ export async function fetchClient<T>(args: { input: URL | RequestInfo; init?: Re
     throw error;
   }
 }
+
+export const SignOut = async () => {
+  await fetchClient({
+    input: hrefs.auth.signOut,
+    init: {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+    },
+  });
+  return true;
+};
 
 export const GetMe = async () =>
   await fetchClient<User>({
@@ -146,11 +157,6 @@ export const DeleteUser = async (userId: string) => {
   return true;
 };
 
-/**
- * Busca usuários inativos (sem login recente)
- * @param days dias sem login
- * @returns lista de usuários inativos
- */
 export const GetInactiveUsers = async (days: number) =>
   await fetchClient<User[]>({
     input: routesBackend.users.inactive.replace(':days', days.toString()),

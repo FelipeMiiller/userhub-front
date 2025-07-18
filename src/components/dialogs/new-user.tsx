@@ -2,7 +2,7 @@
 
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import {
   Dialog,
@@ -16,63 +16,67 @@ import {
 } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+
 import { useUsers } from '@/hooks/useUsers';
-import { UpdateUser, User } from '@/types';
+import { CreateUser } from '@/types';
+import { Roles } from '@/types/auth';
+import { CreateUserFormValues, CreateUserSchema } from '@/lib/validators/users.validators';
 import { cleanObject } from '@/lib/utils/clean';
-import { EditUserSchema, EditUserFormValues } from '@/lib/validators/users.validators';
 
-type EditUserFormDialogProps = {
-  user: User;
-  trigger?: React.ReactNode;
+// Definindo o schema de validação com Zod
 
- 
-};
-
-export function EditUserFormDialog({ user, trigger}: EditUserFormDialogProps) {
-
-  const { updateUser } = useUsers();
+export function NewUser() {
+  const { createUser } = useUsers();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [open, setOpen] = useState(false);
+
   const {
     register,
     handleSubmit,
     reset,
+
     formState: { errors },
-  } = useForm<EditUserFormValues>({
-    resolver: zodResolver(EditUserSchema),
+  } = useForm<CreateUserFormValues>({
+    resolver: zodResolver(CreateUserSchema),
     defaultValues: {
-      Name: user.Name,
-      LastName: user.LastName || '',
-      AvatarUrl: user.AvatarUrl || '',
+      Name: '',
+      LastName: '',
+      Email: '',
       Password: '',
-      Role: user.Role,
+      AvatarUrl: '',
+      Role: 'USER',
     },
   });
 
-
-
-
-  const onSubmit = async (data: EditUserFormValues) => {
+  const onSubmit = async (data: CreateUserFormValues) => {
     setIsSubmitting(true);
     try {
       const userData = {
         ...cleanObject(data),
-      } as UpdateUser;
 
-      await updateUser.mutateAsync({ id: user.Id, data: userData });
+        Role: data.Role === 'ADMIN' ? Roles.ADMIN : Roles.USER,
+      } as CreateUser & { Password: string };
+
+      await createUser.mutateAsync(userData);
+
       reset();
-     window.document.getElementById('edit-user-dialog')?.click();
+      setOpen(false);
     } finally {
       setIsSubmitting(false);
     }
   };
 
   return (
-    <Dialog>
-      <DialogTrigger id={`edit-user-dialog-${user.Id}`} asChild>{trigger || <Button variant="outline">Editar</Button>}</DialogTrigger>
+    <Dialog open={open} onOpenChange={setOpen}>
+      <DialogTrigger asChild>
+        <Button variant="outline">Novo Usuário</Button>
+      </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>Editar Usuário</DialogTitle>
-          <DialogDescription>Atualize os dados do usuário {user.Name}.</DialogDescription>
+          <DialogTitle>Novo Usuário</DialogTitle>
+          <DialogDescription>
+            Preencha os dados abaixo para criar um novo usuário.
+          </DialogDescription>
         </DialogHeader>
 
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
@@ -82,6 +86,7 @@ export function EditUserFormDialog({ user, trigger}: EditUserFormDialogProps) {
               id="Name"
               placeholder="Nome do usuário"
               autoComplete="given-name"
+              autoFocus
               {...register('Name')}
               className={errors.Name ? 'border-destructive focus-visible:ring-destructive' : ''}
             />
@@ -101,6 +106,21 @@ export function EditUserFormDialog({ user, trigger}: EditUserFormDialogProps) {
             />
             {errors.LastName && (
               <p className="text-sm font-medium text-destructive">{errors.LastName.message}</p>
+            )}
+          </div>
+
+          <div className="grid gap-2">
+            <Label htmlFor="Email">Email</Label>
+            <Input
+              id="Email"
+              type="email"
+              placeholder="email@exemplo.com"
+              autoComplete="email"
+              {...register('Email')}
+              className={errors.Email ? 'border-destructive focus-visible:ring-destructive' : ''}
+            />
+            {errors.Email && (
+              <p className="text-sm font-medium text-destructive">{errors.Email.message}</p>
             )}
           </div>
 
@@ -133,6 +153,7 @@ export function EditUserFormDialog({ user, trigger}: EditUserFormDialogProps) {
               <p className="text-sm font-medium text-destructive">{errors.AvatarUrl.message}</p>
             )}
           </div>
+
           <div className="grid gap-2">
             <Label htmlFor="Role">Perfil</Label>
             <select
@@ -147,6 +168,7 @@ export function EditUserFormDialog({ user, trigger}: EditUserFormDialogProps) {
               <p className="text-sm font-medium text-destructive">{errors.Role.message}</p>
             )}
           </div>
+
           <DialogFooter>
             <DialogClose asChild>
               <Button type="button" variant="outline">
@@ -154,7 +176,7 @@ export function EditUserFormDialog({ user, trigger}: EditUserFormDialogProps) {
               </Button>
             </DialogClose>
             <Button type="submit" disabled={isSubmitting}>
-              {isSubmitting ? 'Salvando...' : 'Salvar alterações'}
+              {isSubmitting ? 'Criando...' : 'Criar usuário'}
             </Button>
           </DialogFooter>
         </form>
