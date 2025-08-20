@@ -28,8 +28,8 @@ export async function signUp(
   const validationFields = SignUpFormSchema.safeParse({
     email: formData.get('email'),
     password: formData.get('password'),
-    name: formData.get('name'),
-    lastname: formData.get('lastname'),
+    firstName: formData.get('firstName'),
+    lastName: formData.get('lastName'),
   });
 
   if (!validationFields.success) {
@@ -46,8 +46,8 @@ export async function signUp(
     body: JSON.stringify({
       Email: validationFields.data.email,
       Password: validationFields.data.password,
-      Name: validationFields.data.name,
-      LastName: validationFields.data.lastname,
+      FirstName: validationFields.data.firstName,
+      LastName: validationFields.data.lastName,
     }),
   });
 

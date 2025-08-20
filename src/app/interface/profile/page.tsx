@@ -45,11 +45,11 @@ export default function ProfilePage() {
           <CardContent className="space-y-4">
             <div className="flex justify-center mb-6">
               <Avatar className="h-24 w-24">
-                {session.AvatarUrl ? (
-                  <AvatarImage src={session.AvatarUrl} alt={session.Name} />
+                {session.Photo ? (
+                  <AvatarImage src={session.Photo} alt={session.FirstName} />
                 ) : (
                   <AvatarFallback className="text-2xl">
-                    {session.Name?.[0]?.toUpperCase() ?? '?'}
+                    {session.FirstName?.[0]?.toUpperCase() ?? '?'}
                   </AvatarFallback>
                 )}
               </Avatar>
@@ -58,7 +58,7 @@ export default function ProfilePage() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-1">
                 <p className="text-sm font-medium text-muted-foreground">Nome</p>
-                <p className="font-medium">{session.Name}</p>
+                <p className="font-medium">{session.FirstName}</p>
               </div>
 
               <div className="space-y-1">

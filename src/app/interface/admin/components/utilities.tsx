@@ -67,8 +67,8 @@ export const columns: ColumnDef<User>[] = [
     id: 'avatar',
     header: 'Avatar',
     cell: ({ row }) => {
-      const avatarUrl = row.original.AvatarUrl;
-      const userName = row.original.Name;
+      const avatarUrl = row.original.Photo;
+      const userName = row.original.FirstName;
 
       return (
         <div className="flex items-center justify-center">

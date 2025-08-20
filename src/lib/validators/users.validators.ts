@@ -2,7 +2,7 @@ import { Roles } from '@/types/auth';
 import { z } from 'zod';
 
 export const CreateUserSchema = z.object({
-  Name: z
+  FirstName: z
     .string()
     .min(3, {
       message: 'Nome deve ter pelo menos 3 caracteres.',
@@ -28,7 +28,7 @@ export const CreateUserSchema = z.object({
       message: 'Senha deve conter pelo menos um caractere especial.',
     })
     .trim(),
-  AvatarUrl: z
+ Photo: z
     .string()
     .trim()
     .refine((val) => !val || /^https?:\/\/.+\..+/.test(val), { message: 'URL inválida' })
@@ -43,7 +43,7 @@ export type CreateUserFormValues = z.infer<typeof CreateUserSchema>;
 
 // Schema de validação para edição de usuário
 export const EditUserSchema = z.object({
-  Name: z
+  FirstName: z
     .string()
     .min(2, { message: 'Nome deve ter pelo menos 2 caracteres' })
     .max(50, { message: 'Nome deve ter no máximo 50 caracteres' })
@@ -55,7 +55,7 @@ export const EditUserSchema = z.object({
     .max(50, { message: 'Sobrenome deve ter no máximo 50 caracteres' })
     .trim()
     .optional(),
-  AvatarUrl: z
+  Photo: z
     .string()
     .trim()
     .refine((val) => !val || /^https?:\/\/.+\..+/.test(val), { message: 'URL inválida' })
@@ -101,7 +101,7 @@ export const EditUserSchema = z.object({
 export type EditUserFormValues = z.infer<typeof EditUserSchema>;
 
 export const profileFormSchema = z.object({
-  Name: z
+  FirstName: z
     .string()
     .min(2, { message: 'Nome deve ter pelo menos 2 caracteres' })
     .max(50, { message: 'Nome deve ter no máximo 50 caracteres' })
@@ -113,7 +113,7 @@ export const profileFormSchema = z.object({
     .max(50, { message: 'Sobrenome deve ter no máximo 50 caracteres' })
     .trim()
     .optional(),
-  AvatarUrl: z
+  Photo: z
     .string()
     .trim()
     .refine((val) => !val || /^https?:\/\/.+\..+/.test(val), { message: 'URL inválida' })

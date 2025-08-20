@@ -3,9 +3,9 @@ import { Roles } from './auth';
 export type User = {
   Id: string;
   Email: string;
-  Name: string;
+  FirstName: string;
   LastName: string | null;
-  AvatarUrl: string | null;
+  Photo: string | null;
   Role: Roles;
   Status: boolean;
   LastLoginAt: Date | null;
@@ -14,7 +14,7 @@ export type User = {
 };
 
 export type CreateUser = Omit<User, 'Id' | 'CreatedAt' | 'UpdatedAt' | 'LastLoginAt' | 'Status'>;
-export type UpdateUser = Partial<Pick<User, 'Name' | 'LastName' | 'AvatarUrl'>> & {
+export type UpdateUser = Partial<Pick<User, 'FirstName' | 'LastName' | 'Photo'>> & {
   Password?: string;
 };
 

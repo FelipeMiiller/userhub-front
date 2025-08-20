@@ -1,8 +1,8 @@
 export type SignUpFormState =
   | {
       error?: {
-        name?: string[];
-        lastname?: string[];
+        firstName?: string[];
+        lastName?: string[];
         email?: string[];
         password?: string[];
       };

@@ -23,8 +23,8 @@ export default function Header() {
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Avatar>
-              {session?.AvatarUrl ? (
-                <AvatarImage src={session.AvatarUrl} alt={session.Name} />
+              {session?.Photo ? (
+                <AvatarImage src={session.Photo} alt={session.FirstName} />
               ) : (
                 <AvatarFallback>{session?.Email?.[0]?.toUpperCase() ?? '?'}</AvatarFallback>
               )}

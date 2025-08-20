@@ -17,12 +17,12 @@ export function UserProfileCard({ className, ...props }: React.ComponentPropsWit
           <ReactLogo size={80} className="animate-bounce" />
         </div>
         <CardTitle className="text-2xl font-bold text-center">
-          {session ? `${'Bem-vindo!'}, ${session.Name}` : 'Bem-vindo!'}
+          {session ? `${'Bem-vindo!'}, ${session.FirstName}` : 'Bem-vindo!'}
         </CardTitle>
         <CardDescription className="text-center">
           {session ? (
             <>
-              <span className="block font-semibold">{session.Name}</span>
+              <span className="block font-semibold">{session.FirstName}</span>
               <span className="block text-sm text-muted-foreground capitalize">{session.Role}</span>
               <span className="block mt-1">{'Você está logado em sua conta'}</span>
             </>

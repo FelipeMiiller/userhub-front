@@ -1,13 +1,13 @@
 import { z } from 'zod';
 
 export const SignUpFormSchema = z.object({
-  name: z
+  firstName: z
     .string()
     .min(2, {
       message: 'Nome deve ter pelo menos 2 caracteres.',
     })
     .trim(),
-  lastname: z
+  lastName: z
     .string()
     .min(2, {
       message: 'Sobrenome deve ter pelo menos 2 caracteres.',

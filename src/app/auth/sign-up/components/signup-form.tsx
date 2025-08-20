@@ -42,23 +42,23 @@ export function SignUpForm({ className, ...props }: React.ComponentPropsWithoutR
 
       <div className="grid gap-4">
         <div className="grid gap-2">
-          <Label htmlFor="name">Nome</Label>
+          <Label htmlFor="firstName">Nome</Label>
           <Input
-            id="name"
+            id="firstName"
             type="text"
-            name="name"
+            name="firstName"
             placeholder="Nome"
             required
             disabled={isPending}
-            aria-invalid={state?.error?.name ? 'true' : 'false'}
+            aria-invalid={state?.error?.firstName ? 'true' : 'false'}
             aria-describedby="name-error"
             className={cn({
-              'border-destructive focus-visible:ring-destructive': state?.error?.name,
+              'border-destructive focus-visible:ring-destructive': state?.error?.firstName,
             })}
           />
-          {state?.error?.name && (
+          {state?.error?.firstName && (
             <p id="name-error" className="text-sm font-medium text-destructive">
-              {state.error.name.join(', ')}
+              {state.error.firstName.join(', ')}
             </p>
           )}
         </div>
@@ -66,21 +66,21 @@ export function SignUpForm({ className, ...props }: React.ComponentPropsWithoutR
         <div className="grid gap-2">
           <Label htmlFor="lastname">Sobrenome</Label>
           <Input
-            id="lastname"
+            id="lastName"
             type="text"
-            name="lastname"
+            name="lastName"
             placeholder="Sobrenome"
             required
             disabled={isPending}
-            aria-invalid={state?.error?.lastname ? 'true' : 'false'}
+            aria-invalid={state?.error?.lastName ? 'true' : 'false'}
             aria-describedby="lastname-error"
             className={cn({
-              'border-destructive focus-visible:ring-destructive': state?.error?.lastname,
+              'border-destructive focus-visible:ring-destructive': state?.error?.lastName,
             })}
           />
-          {state?.error?.lastname && (
+          {state?.error?.lastName && (
             <p id="lastname-error" className="text-sm font-medium text-destructive">
-              {state.error.lastname.join(', ')}
+              {state.error.lastName.join(', ')}
             </p>
           )}
         </div>
